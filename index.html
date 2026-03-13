@@ -24,7 +24,7 @@
     html,body{min-height:100%;background:var(--bg3);font-family:var(--fn);color:var(--txt);}
     .app{max-width:480px;margin:0 auto;min-height:100vh;background:var(--bg);}
 
-    /* ── Header ── */
+    /* Header */
     .hdr{background:var(--red);padding:1rem 1.25rem .85rem;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:50;}
     .logo{color:#fff;}
     .logo-main{font-size:17px;font-weight:600;letter-spacing:-.3px;}
@@ -34,23 +34,22 @@
     .notif-btn{display:flex;align-items:center;gap:5px;background:rgba(0,0,0,.2);border:none;border-radius:20px;padding:5px 10px;cursor:pointer;color:rgba(255,255,255,.9);font-family:var(--fm);font-size:10px;letter-spacing:.5px;transition:background .15s;}
     .notif-btn:hover{background:rgba(0,0,0,.35);}
 
-    /* ── API Banner ── */
+    /* API Banner */
     .api-banner{margin:1rem 1.25rem 0;background:rgba(226,0,26,.07);border:.5px solid rgba(226,0,26,.25);border-radius:var(--rs);padding:10px 14px;}
     .api-banner.hidden{display:none;}
     .api-banner-title{font-size:12px;font-weight:500;color:var(--red);margin-bottom:6px;}
     .api-row{display:flex;gap:6px;align-items:center;}
     .api-input{flex:1;font-family:var(--fm);font-size:11px;padding:5px 8px;border:.5px solid var(--brd2);border-radius:var(--rs);background:var(--bg);color:var(--txt);}
-    .api-save{background:var(--red);color:#fff;border:none;border-radius:var(--rs);padding:5px 10px;font-size:11px;font-family:var(--fn);font-weight:500;cursor:pointer;white-space:nowrap;}
+    .api-save{background:var(--red);color:#fff;border:none;border-radius:var(--rs);padding:5px 10px;font-size:11px;font-family:var(--fn);font-weight:500;cursor:pointer;}
     .api-hint{font-size:10px;color:var(--txt2);margin-top:5px;font-family:var(--fm);}
-    .api-hint a{color:var(--red);}
 
-    /* ── Perm banner ── */
+    /* Perm banner */
     .perm-banner{margin:.75rem 1.25rem 0;background:rgba(0,0,0,.04);border:.5px solid var(--brd);border-radius:var(--rs);padding:9px 14px;display:flex;align-items:center;gap:10px;cursor:pointer;}
     .perm-banner.hidden{display:none;}
     .perm-text{flex:1;font-size:12px;color:var(--txt2);}
     .perm-ok{background:var(--red);color:#fff;border:none;border-radius:var(--rs);padding:5px 10px;font-size:11px;font-family:var(--fn);font-weight:500;cursor:pointer;}
 
-    /* ── Week tabs ── */
+    /* Week tabs */
     .week-tabs{display:flex;border-bottom:.5px solid var(--brd);background:var(--bg2);overflow-x:auto;scrollbar-width:none;margin-top:.75rem;}
     .week-tabs::-webkit-scrollbar{display:none;}
     .wtab{flex:1;min-width:44px;padding:10px 4px 8px;text-align:center;cursor:pointer;border-bottom:2px solid transparent;transition:all .15s;color:var(--txt2);user-select:none;}
@@ -62,7 +61,7 @@
     .wtab-dot{width:4px;height:4px;border-radius:50%;background:var(--red);margin:4px auto 0;opacity:0;}
     .wtab-dot.has{opacity:1;}
 
-    /* ── Body ── */
+    /* Body */
     .body{padding:1rem 1.25rem 5rem;}
     .day-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
     .day-title{font-size:17px;font-weight:600;}
@@ -72,14 +71,15 @@
     .refresh-btn.spinning svg{animation:spin .7s linear infinite;}
     @keyframes spin{to{transform:rotate(360deg)}}
 
-    /* ── Live status bar ── */
+    /* Live bar */
     .live-bar{display:flex;align-items:center;gap:6px;margin-bottom:10px;font-size:11px;color:var(--txt2);font-family:var(--fm);}
+    .live-bar.hidden{display:none;}
     .live-dot{width:6px;height:6px;border-radius:50%;background:var(--green);flex-shrink:0;}
     .live-dot.loading{background:var(--amber);animation:pulse 1s ease-in-out infinite;}
     .live-dot.error{background:var(--red);}
     @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
 
-    /* ── Zug card ── */
+    /* Zug card */
     .zug-card{background:var(--bg);border:.5px solid var(--brd);border-radius:var(--r);margin-bottom:10px;overflow:hidden;transition:border-color .15s;}
     .zug-card:hover{border-color:var(--brd2);}
     .zug-card.delayed{border-left:3px solid var(--amber);}
@@ -99,7 +99,7 @@
     .chevron{font-size:11px;color:var(--txt3);transition:transform .2s;padding:4px;}
     .zug-card.expanded .chevron{transform:rotate(180deg);}
 
-    /* ── Card body ── */
+    /* Card body */
     .zug-body{display:none;border-top:.5px solid var(--brd);}
     .zug-card.expanded .zug-body{display:block;}
 
@@ -127,8 +127,6 @@
     .nb{background:none;border:.5px solid var(--brd2);border-radius:4px;padding:2px 7px;font-size:10px;font-family:var(--fm);cursor:pointer;color:var(--txt2);transition:all .12s;white-space:nowrap;}
     .nb:hover{border-color:var(--red);color:var(--red);background:rgba(226,0,26,.06);}
     .nb.set{background:rgba(226,0,26,.1);border-color:rgba(226,0,26,.4);color:var(--red);}
-
-    /* Notif mins */
     .notif-mins-row{padding:8px 14px;border-top:.5px solid var(--brd);display:flex;align-items:center;gap:8px;background:var(--bg2);font-size:12px;color:var(--txt2);}
     .notif-mins-row input{width:52px;font-family:var(--fm);font-size:12px;padding:4px 6px;border:.5px solid var(--brd2);border-radius:var(--rs);background:var(--bg);color:var(--txt);}
 
@@ -137,36 +135,63 @@
     .add-card:hover{border-color:var(--red);color:var(--red);background:rgba(226,0,26,.04);}
     .add-card .plus{font-size:22px;margin-bottom:4px;}
 
-    /* Empty / skeleton */
+    /* Empty */
     .empty{text-align:center;padding:2.5rem 1rem;color:var(--txt2);font-size:13px;line-height:1.7;}
     .empty-icon{font-size:36px;margin-bottom:8px;opacity:.4;}
-    .skeleton{background:var(--bg2);border-radius:var(--r);height:72px;margin-bottom:10px;animation:shimmer 1.2s ease-in-out infinite;}
-    @keyframes shimmer{0%,100%{opacity:.6}50%{opacity:1}}
 
-    /* Modal */
-    .modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:200;align-items:center;justify-content:center;padding:1rem;}
+    /* ── MODAL ── */
+    .modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;align-items:flex-end;justify-content:center;}
     .modal-bg.open{display:flex;}
-    .modal{background:var(--bg);border-radius:var(--r);padding:1.25rem;width:100%;max-width:340px;border:.5px solid var(--brd2);max-height:90vh;overflow-y:auto;}
+    .modal{background:var(--bg);border-radius:var(--r) var(--r) 0 0;padding:1.25rem;width:100%;max-width:480px;border:.5px solid var(--brd2);max-height:92vh;overflow-y:auto;}
+    .modal-handle{width:36px;height:4px;background:var(--brd2);border-radius:2px;margin:0 auto 1rem;}
     .modal-title{font-size:15px;font-weight:500;margin-bottom:1rem;}
+
+    /* Step 1: station search */
+    .step{display:none;} .step.active{display:block;}
     .fl{margin-bottom:10px;}
     .fl label{font-family:var(--fm);font-size:10px;letter-spacing:.8px;color:var(--txt3);text-transform:uppercase;display:block;margin-bottom:4px;}
     .fl input,.fl select{width:100%;font-family:var(--fn);font-size:13px;padding:8px 10px;border:.5px solid var(--brd2);border-radius:var(--rs);background:var(--bg2);color:var(--txt);}
-    .fl-row{display:flex;gap:8px;}
-    .fl-row .fl{flex:1;}
-
-    /* Station search dropdown */
     .station-wrap{position:relative;}
-    .station-dropdown{position:absolute;top:100%;left:0;right:0;background:var(--bg);border:.5px solid var(--brd2);border-radius:var(--rs);z-index:100;max-height:180px;overflow-y:auto;margin-top:2px;}
-    .station-option{padding:9px 12px;font-size:13px;cursor:pointer;border-bottom:.5px solid var(--brd);}
+    .station-dropdown{position:absolute;top:100%;left:0;right:0;background:var(--bg);border:.5px solid var(--brd2);border-radius:var(--rs);z-index:100;max-height:200px;overflow-y:auto;margin-top:2px;box-shadow:0 4px 20px rgba(0,0,0,.12);}
+    .station-option{padding:10px 12px;font-size:13px;cursor:pointer;border-bottom:.5px solid var(--brd);}
     .station-option:last-child{border-bottom:none;}
     .station-option:hover{background:var(--bg2);}
-    .station-id{font-family:var(--fm);font-size:10px;color:var(--txt3);margin-left:6px;}
+    .known-stations{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px;}
+    .known-chip{font-family:var(--fm);font-size:10px;padding:3px 8px;border-radius:4px;border:.5px solid var(--brd2);cursor:pointer;color:var(--txt2);transition:all .12s;background:var(--bg2);}
+    .known-chip:hover{border-color:var(--red);color:var(--red);}
+
+    /* Step 2: connection list */
+    .conn-list{margin-bottom:1rem;}
+    .conn-item{background:var(--bg2);border:.5px solid var(--brd);border-radius:var(--rs);padding:12px 14px;margin-bottom:8px;cursor:pointer;transition:all .15s;display:flex;align-items:center;gap:12px;}
+    .conn-item:hover{border-color:var(--red);background:rgba(226,0,26,.04);}
+    .conn-item.selected{border-color:var(--red);background:rgba(226,0,26,.07);border-width:1.5px;}
+    .conn-item.cancelled{opacity:.5;}
+    .conn-dep{font-family:var(--fm);font-size:20px;font-weight:500;letter-spacing:-1px;flex-shrink:0;min-width:52px;}
+    .conn-dep.delayed{color:var(--amber);}
+    .conn-info{flex:1;min-width:0;}
+    .conn-line{font-size:13px;font-weight:500;}
+    .conn-detail{font-family:var(--fm);font-size:11px;color:var(--txt2);margin-top:2px;}
+    .conn-arr{text-align:right;flex-shrink:0;}
+    .conn-arr-time{font-family:var(--fm);font-size:13px;color:var(--txt2);}
+    .conn-delay{font-family:var(--fm);font-size:10px;color:var(--amber);margin-top:2px;}
+    .conn-cancelled-badge{font-family:var(--fm);font-size:10px;color:var(--red);padding:1px 6px;border-radius:3px;background:rgba(226,0,26,.1);}
+
+    .loading-state{text-align:center;padding:2rem;color:var(--txt2);font-size:13px;}
+    .loading-spinner{width:24px;height:24px;border:2px solid var(--brd);border-top-color:var(--red);border-radius:50%;animation:spin .7s linear infinite;margin:0 auto 10px;}
 
     .modal-acts{display:flex;gap:8px;margin-top:1rem;}
     .modal-acts button{flex:1;padding:9px;border-radius:var(--rs);font-family:var(--fn);font-size:13px;cursor:pointer;}
     .btn-c{background:none;border:.5px solid var(--brd2);color:var(--txt2);}
     .btn-s{background:var(--red);border:none;color:#fff;font-weight:500;}
     .btn-s:hover{background:var(--red-d);}
+    .btn-s:disabled{background:var(--brd2);cursor:not-allowed;}
+    .btn-back{background:none;border:.5px solid var(--brd2);color:var(--txt2);}
+
+    /* Day picker in modal */
+    .days-grid{display:flex;gap:4px;flex-wrap:wrap;}
+    .day-cb{display:none;}
+    .day-lbl{font-family:var(--fm);font-size:10px;padding:4px 8px;border-radius:4px;border:.5px solid var(--brd2);cursor:pointer;color:var(--txt2);transition:all .12s;user-select:none;}
+    .day-cb:checked + .day-lbl{background:rgba(226,0,26,.1);border-color:rgba(226,0,26,.4);color:var(--red);}
 
     /* Toast */
     .toasts{position:fixed;bottom:16px;left:50%;transform:translateX(-50%);z-index:300;display:flex;flex-direction:column;gap:6px;align-items:center;pointer-events:none;}
@@ -177,7 +202,6 @@
 <body>
 <div class="app">
 
-  <!-- Header -->
   <div class="hdr">
     <div class="logo">
       <div class="logo-main">Train Tracker</div>
@@ -192,30 +216,22 @@
     </div>
   </div>
 
-  <!-- API URL Banner -->
   <div class="api-banner" id="api-banner">
     <div class="api-banner-title">🔗 API-Server URL eintragen</div>
     <div class="api-row">
-      <input class="api-input" type="text" id="api-url-input"
-        placeholder="https://train-tracker-api.onrender.com">
+      <input class="api-input" type="text" id="api-url-input" placeholder="https://train-tracker-api.onrender.com">
       <button class="api-save" onclick="saveApiUrl()">Speichern</button>
     </div>
-    <div class="api-hint">
-      Deine Render.com URL — dann kommen echte ÖBB-Daten.<br>
-      Noch kein Server? <a href="https://github.com" target="_blank">Anleitung im README</a>
-    </div>
+    <div class="api-hint">Deine Render.com URL für echte ÖBB Live-Daten</div>
   </div>
 
-  <!-- Perm banner -->
   <div class="perm-banner hidden" id="perm-banner" onclick="requestNotifPermission()">
     <div class="perm-text">🔔 Push-Benachrichtigungen aktivieren</div>
     <button class="perm-ok">Erlauben</button>
   </div>
 
-  <!-- Week tabs -->
   <div class="week-tabs" id="week-tabs"></div>
 
-  <!-- Body -->
   <div class="body">
     <div class="day-header">
       <div>
@@ -224,15 +240,14 @@
       </div>
       <button class="refresh-btn" id="refresh-btn" onclick="refreshLive()">
         <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
-          <path d="M10.5 2A5 5 0 1 0 11 6"/>
-          <path d="M11 2V5H8"/>
+          <path d="M10.5 2A5 5 0 1 0 11 6"/><path d="M11 2V5H8"/>
         </svg>
-        Aktualisieren
+        Live
       </button>
     </div>
     <div class="live-bar hidden" id="live-bar">
       <div class="live-dot" id="live-dot"></div>
-      <span id="live-label">Live</span>
+      <span id="live-label"></span>
     </div>
     <div id="zug-list"></div>
     <div class="add-card" onclick="openModal()">
@@ -242,50 +257,57 @@
   </div>
 </div>
 
-<!-- Add modal -->
+<!-- Modal: Zug suchen & speichern -->
 <div class="modal-bg" id="modal">
   <div class="modal">
-    <div class="modal-title" id="modal-title">Zug hinzufügen</div>
+    <div class="modal-handle"></div>
+    <div class="modal-title" id="modal-title">Zug suchen</div>
 
-    <div class="fl">
-      <label>Von (Startbahnhof)</label>
-      <div class="station-wrap">
-        <input type="text" id="m-von" placeholder="Bahnhof suchen…" autocomplete="off"
-          oninput="searchStation('von', this.value)">
-        <div class="station-dropdown hidden" id="drop-von"></div>
-      </div>
-      <input type="hidden" id="m-von-id">
-    </div>
-
-    <div class="fl">
-      <label>Nach (Zielbahnhof)</label>
-      <div class="station-wrap">
-        <input type="text" id="m-nach" placeholder="Bahnhof suchen…" autocomplete="off"
-          oninput="searchStation('nach', this.value)">
-        <div class="station-dropdown hidden" id="drop-nach"></div>
-      </div>
-      <input type="hidden" id="m-nach-id">
-    </div>
-
-    <div class="fl-row">
+    <!-- Step 1: Von / Nach -->
+    <div class="step active" id="step1">
       <div class="fl">
-        <label>Abfahrt</label>
-        <input type="time" id="m-dep">
+        <label>Von</label>
+        <div class="station-wrap">
+          <input type="text" id="m-von" placeholder="Bahnhof suchen…" autocomplete="off"
+            oninput="searchStation('von', this.value)" onfocus="showKnown('von')">
+          <div class="station-dropdown hidden" id="drop-von"></div>
+        </div>
+        <input type="hidden" id="m-von-id">
       </div>
       <div class="fl">
-        <label>Ankunft (optional)</label>
-        <input type="time" id="m-arr">
+        <label>Nach</label>
+        <div class="station-wrap">
+          <input type="text" id="m-nach" placeholder="Bahnhof suchen…" autocomplete="off"
+            oninput="searchStation('nach', this.value)" onfocus="showKnown('nach')">
+          <div class="station-dropdown hidden" id="drop-nach"></div>
+        </div>
+        <input type="hidden" id="m-nach-id">
+      </div>
+      <div class="modal-acts">
+        <button class="btn-c" onclick="closeModal()">Abbrechen</button>
+        <button class="btn-s" id="btn-search" onclick="searchConnections()">Züge suchen →</button>
       </div>
     </div>
 
-    <div class="fl">
-      <label>Zwischenhalte (kommagetrennt, optional)</label>
-      <input type="text" id="m-stops" placeholder="z.B. Wildon, Leoben Hbf, Zeltweg">
-    </div>
-
-    <div class="modal-acts">
-      <button class="btn-c" onclick="closeModal()">Abbrechen</button>
-      <button class="btn-s" onclick="saveZug()">Speichern</button>
+    <!-- Step 2: Zugauswahl -->
+    <div class="step" id="step2">
+      <div id="conn-list-wrap"></div>
+      <div class="fl" style="margin-top:.75rem">
+        <label>An welchen Tagen fährt du diesen Zug?</label>
+        <div class="days-grid">
+          <input class="day-cb" type="checkbox" id="d0"><label class="day-lbl" for="d0">Mo</label>
+          <input class="day-cb" type="checkbox" id="d1"><label class="day-lbl" for="d1">Di</label>
+          <input class="day-cb" type="checkbox" id="d2"><label class="day-lbl" for="d2">Mi</label>
+          <input class="day-cb" type="checkbox" id="d3"><label class="day-lbl" for="d3">Do</label>
+          <input class="day-cb" type="checkbox" id="d4"><label class="day-lbl" for="d4">Fr</label>
+          <input class="day-cb" type="checkbox" id="d5"><label class="day-lbl" for="d5">Sa</label>
+          <input class="day-cb" type="checkbox" id="d6"><label class="day-lbl" for="d6">So</label>
+        </div>
+      </div>
+      <div class="modal-acts">
+        <button class="btn-back" onclick="goStep(1)">← Zurück</button>
+        <button class="btn-s" id="btn-save" onclick="saveSelectedZug()" disabled>Speichern</button>
+      </div>
     </div>
   </div>
 </div>
@@ -293,23 +315,42 @@
 <div class="toasts" id="toasts"></div>
 
 <script>
-// ── Config ───────────────────────────────────────────────────────────────────
 const DAY_NAMES = ['Montag','Dienstag','Mittwoch','Donnerstag','Freitag','Samstag','Sonntag'];
 const DAY_SHORT = ['Mo','Di','Mi','Do','Fr','Sa','So'];
 const TODAY     = (new Date().getDay() + 6) % 7;
+const KNOWN_STATIONS = [
+  { id:'8100070', name:'Leoben Hbf' },
+  { id:'8100071', name:'St.Michael i.Oststmk' },
+  { id:'8100072', name:'Knittelfeld' },
+  { id:'8100059', name:'Bruck/Mur Hbf' },
+  { id:'8100173', name:'Graz Hbf' },
+];
 
-let activeDay  = TODAY;
-let nextId     = 100;
-let notifPerm  = Notification.permission;
-let liveData   = {}; // tripId -> live departure info
-let searchTimer = null;
+let activeDay    = TODAY;
+let nextId       = 100;
+let notifPerm    = Notification.permission;
+let searchTimer  = null;
+let selectedConn = null;
 
-// ── API URL ───────────────────────────────────────────────────────────────────
-function getApiUrl() {
-  return localStorage.getItem('oebb-api-url') || '';
+// ── Data ──────────────────────────────────────────────────────────────────────
+function loadData() {
+  try {
+    const raw = localStorage.getItem('oebb-v4');
+    if (raw) {
+      const d = JSON.parse(raw);
+      Object.values(d).forEach(arr => arr.forEach(z => { if (z.id >= nextId) nextId = z.id + 1; }));
+      return d;
+    }
+  } catch(e) {}
+  return { 0:[], 1:[], 2:[], 3:[], 4:[], 5:[], 6:[] };
 }
+const data = loadData();
+function save() { try { localStorage.setItem('oebb-v4', JSON.stringify(data)); } catch(e) {} }
+
+// ── API ───────────────────────────────────────────────────────────────────────
+function getApiUrl() { return localStorage.getItem('oebb-api-url') || ''; }
 function saveApiUrl() {
-  const val = document.getElementById('api-url-input').value.trim().replace(/\/$/, '');
+  const val = document.getElementById('api-url-input').value.trim().replace(/\/$/,'');
   if (!val) { toast('Bitte URL eingeben'); return; }
   localStorage.setItem('oebb-api-url', val);
   document.getElementById('api-banner').classList.add('hidden');
@@ -318,35 +359,11 @@ function saveApiUrl() {
 }
 function initApiBanner() {
   const url = getApiUrl();
-  const banner = document.getElementById('api-banner');
   if (url) {
-    banner.classList.add('hidden');
-  } else {
-    banner.classList.remove('hidden');
+    document.getElementById('api-banner').classList.add('hidden');
+    document.getElementById('api-url-input').value = url;
   }
-  if (url) document.getElementById('api-url-input').value = url;
 }
-
-// ── Load / Save ───────────────────────────────────────────────────────────────
-function loadData() {
-  try {
-    const raw = localStorage.getItem('oebb-v3');
-    if (raw) {
-      const d = JSON.parse(raw);
-      Object.values(d).forEach(arr =>
-        arr.forEach(z => { if (z.id >= nextId) nextId = z.id + 1; })
-      );
-      return d;
-    }
-  } catch(e) {}
-  return { 0:[], 1:[], 2:[], 3:[], 4:[], 5:[], 6:[] };
-}
-const data = loadData();
-function save() {
-  try { localStorage.setItem('oebb-v3', JSON.stringify(data)); } catch(e) {}
-}
-
-// ── Live API calls ────────────────────────────────────────────────────────────
 async function apiFetch(path) {
   const base = getApiUrl();
   if (!base) return null;
@@ -354,84 +371,207 @@ async function apiFetch(path) {
     const res = await fetch(base + path);
     if (!res.ok) return null;
     return await res.json();
-  } catch(e) {
-    return null;
-  }
+  } catch(e) { return null; }
 }
 
-async function searchStation(field, query) {
+// ── Station search ────────────────────────────────────────────────────────────
+function showKnown(field) {
+  const drop = document.getElementById('drop-' + field);
+  const query = document.getElementById('m-' + field).value;
+  if (query.length > 1) return;
+  drop.innerHTML = KNOWN_STATIONS.map(s =>
+    `<div class="station-option" onclick="selectStation('${field}','${esc(s.name)}','${s.id}')">${s.name}</div>`
+  ).join('');
+  drop.classList.remove('hidden');
+}
+function searchStation(field, query) {
   clearTimeout(searchTimer);
   const drop = document.getElementById('drop-' + field);
-  if (!query || query.length < 2) { drop.classList.add('hidden'); return; }
+  if (!query || query.length < 2) { showKnown(field); return; }
   searchTimer = setTimeout(async () => {
     const results = await apiFetch('/stations?query=' + encodeURIComponent(query));
-    if (!results || !results.length) { drop.classList.add('hidden'); return; }
-    drop.innerHTML = results.map(s => `
-      <div class="station-option" onclick="selectStation('${field}','${esc(s.name)}','${s.id}')">
-        ${s.name}
-      </div>`).join('');
+    const list = results && results.length ? results : KNOWN_STATIONS.filter(s => s.name.toLowerCase().includes(query.toLowerCase()));
+    if (!list.length) { drop.classList.add('hidden'); return; }
+    drop.innerHTML = list.map(s =>
+      `<div class="station-option" onclick="selectStation('${field}','${esc(s.name)}','${s.id}')">${s.name}</div>`
+    ).join('');
     drop.classList.remove('hidden');
-  }, 300);
+  }, 250);
 }
-
 function selectStation(field, name, id) {
   document.getElementById('m-' + field).value = name;
   document.getElementById('m-' + field + '-id').value = id;
   document.getElementById('drop-' + field).classList.add('hidden');
 }
 
+// ── Connection search ─────────────────────────────────────────────────────────
+async function searchConnections() {
+  const vonId  = document.getElementById('m-von-id').value;
+  const nachId = document.getElementById('m-nach-id').value;
+  const von    = document.getElementById('m-von').value.trim();
+  const nach   = document.getElementById('m-nach').value.trim();
+  if (!von || !nach) { toast('Bitte Von und Nach ausfüllen'); return; }
+  if (!getApiUrl()) { toast('Bitte zuerst API-URL eintragen'); return; }
+
+  goStep(2);
+  document.getElementById('conn-list-wrap').innerHTML =
+    `<div class="loading-state"><div class="loading-spinner"></div>Züge werden geladen…</div>`;
+  document.getElementById('btn-save').disabled = true;
+  selectedConn = null;
+
+  // Pre-select current day
+  [0,1,2,3,4,5,6].forEach(i => document.getElementById('d'+i).checked = (i === activeDay));
+
+  const fromId = vonId || '';
+  const toId   = nachId || '';
+  // today's date for the search
+  const today  = new Date().toISOString().split('T')[0];
+  const conns  = await apiFetch(`/connections?fromId=${encodeURIComponent(fromId)}&toId=${encodeURIComponent(toId)}&date=${today}`);
+
+  if (!conns || !conns.length) {
+    document.getElementById('conn-list-wrap').innerHTML =
+      `<div class="loading-state">Keine Verbindungen gefunden.<br><small>Tipp: Bahnhofs-IDs über Suche auswählen</small></div>`;
+    return;
+  }
+
+  renderConnList(conns, von, nach);
+}
+
+function renderConnList(conns, von, nach) {
+  const html = conns.map((c, i) => {
+    const depTime = c.plannedDep ? fmtTime(new Date(c.plannedDep)) : '—';
+    const arrTime = c.plannedArr ? fmtTime(new Date(c.plannedArr)) : '—';
+    const delaySec = c.depDelay || 0;
+    const delayMin = Math.round(delaySec / 60);
+    const realDep  = delayMin > 0 ? addMins(depTime, delayMin) : depTime;
+    const isCancelled = c.cancelled;
+    return `
+      <div class="conn-item ${isCancelled?'cancelled':''}" id="ci-${i}" onclick="selectConn(${i})">
+        <div class="conn-dep ${delayMin>0?'delayed':''}">${isCancelled ? '—' : realDep}</div>
+        <div class="conn-info">
+          <div class="conn-line">${c.lineName || (von+' → '+nach)}${c.transfers>0?' ('+c.transfers+' Umstieg)':''}</div>
+          <div class="conn-detail">${c.direction || (von+' → '+nach)}</div>
+        </div>
+        <div class="conn-arr">
+          <div class="conn-arr-time">${arrTime}</div>
+          ${delayMin > 0 ? `<div class="conn-delay">+${delayMin} min</div>` : ''}
+          ${isCancelled ? `<div class="conn-cancelled-badge">Entfällt</div>` : ''}
+        </div>
+      </div>`;
+  }).join('');
+
+  document.getElementById('conn-list-wrap').innerHTML =
+    `<div style="font-family:var(--fm);font-size:10px;letter-spacing:1px;color:var(--txt3);text-transform:uppercase;margin-bottom:8px">Verbindungen heute</div>
+     <div class="conn-list">${html}</div>`;
+
+  // store conn data for saving
+  window._connData = conns;
+  window._connVon  = document.getElementById('m-von').value;
+  window._connNach = document.getElementById('m-nach').value;
+}
+
+function selectConn(i) {
+  document.querySelectorAll('.conn-item').forEach(el => el.classList.remove('selected'));
+  document.getElementById('ci-'+i)?.classList.add('selected');
+  selectedConn = window._connData[i];
+  document.getElementById('btn-save').disabled = false;
+}
+
+function saveSelectedZug() {
+  if (!selectedConn) { toast('Bitte einen Zug auswählen'); return; }
+  const days = [0,1,2,3,4,5,6].filter(i => document.getElementById('d'+i).checked);
+  if (!days.length) { toast('Bitte mindestens einen Wochentag auswählen'); return; }
+
+  const von  = window._connVon;
+  const nach = window._connNach;
+  const dep  = selectedConn.plannedDep ? fmtTime(new Date(selectedConn.plannedDep)) : '—';
+  const arr  = selectedConn.plannedArr ? fmtTime(new Date(selectedConn.plannedArr)) : '—';
+
+  // Build stops from stopovers
+  const now = new Date();
+  const stops = (selectedConn.stops || []).map(s => {
+    const t = s.plannedDeparture || s.plannedArrival;
+    const time = t ? fmtTime(new Date(t)) : '—';
+    // Determine status based on time
+    const stopDate = t ? new Date(t) : null;
+    const status = stopDate ? (stopDate < now ? 'passed' : 'upcoming') : 'upcoming';
+    return { name: s.name, time, status, delay: Math.round((s.departureDelay||0)/60)||0 };
+  });
+
+  // Mark current stop (first upcoming after a passed)
+  const firstUpcoming = stops.findIndex(s => s.status === 'upcoming');
+  if (firstUpcoming > 0) stops[firstUpcoming].status = 'current';
+
+  // Progress
+  const passed  = stops.filter(s => s.status === 'passed').length;
+  const progress = stops.length > 1 ? Math.round((passed / (stops.length - 1)) * 100) : 0;
+
+  const zug = {
+    id: nextId++,
+    von, nach,
+    vonId: document.getElementById('m-von-id').value,
+    dep, arr,
+    tripId:   selectedConn.tripId,
+    lineName: selectedConn.lineName,
+    delay:    Math.round((selectedConn.depDelay||0)/60),
+    status:   selectedConn.cancelled ? 'cancelled' : (selectedConn.depDelay||0) > 0 ? 'delayed' : 'ontime',
+    progress,
+    stops,
+    notifs: {}, notifMins: 5
+  };
+
+  days.forEach(d => {
+    if (!data[d]) data[d] = [];
+    data[d].push({ ...zug, id: nextId++ });
+  });
+  // Fix: first entry uses original id
+  days.forEach((d, i) => { if (i === 0) data[d][data[d].length-1].id = zug.id; });
+
+  save(); renderTabs(); renderDay();
+  closeModal();
+  toast(`✓ ${zug.lineName||von+' → '+nach} gespeichert für ${days.map(d=>DAY_SHORT[d]).join(', ')}`);
+}
+
+// ── Live refresh ──────────────────────────────────────────────────────────────
 async function refreshLive() {
   const apiUrl = getApiUrl();
   const btn = document.getElementById('refresh-btn');
   const bar = document.getElementById('live-bar');
   const dot = document.getElementById('live-dot');
   const lbl = document.getElementById('live-label');
-
-  if (!apiUrl) { toast('Bitte zuerst API-URL eintragen (roter Bereich oben)'); return; }
+  if (!apiUrl) { toast('Bitte zuerst API-URL eintragen'); return; }
 
   btn.classList.add('spinning');
   bar.classList.remove('hidden');
   dot.className = 'live-dot loading';
   lbl.textContent = 'Lädt…';
 
-  // Collect all stationIds from today's trains
-  const zuege = (data[activeDay] || []);
-  if (!zuege.length) {
-    btn.classList.remove('spinning');
-    dot.className = 'live-dot';
-    lbl.textContent = 'Keine Züge heute';
-    return;
-  }
+  const zuege = (data[activeDay]||[]);
+  if (!zuege.length) { btn.classList.remove('spinning'); dot.className='live-dot'; lbl.textContent='Keine Züge'; return; }
 
-  // Fetch departures for all unique from-stations
-  const stationIds = [...new Set(zuege.map(z => z.vonId).filter(Boolean))];
   let updated = 0;
+  const stationIds = [...new Set(zuege.map(z => z.vonId).filter(Boolean))];
 
   for (const sid of stationIds) {
     const deps = await apiFetch(`/departures?stationId=${sid}&duration=180`);
     if (!deps) continue;
 
     deps.forEach(dep => {
-      // Try to match to a saved train by planned departure time
       const depTime = dep.plannedWhen ? fmtTime(new Date(dep.plannedWhen)) : null;
       if (!depTime) return;
-
       zuege.forEach(z => {
         if (z.vonId === sid && z.dep === depTime) {
-          const delaySec = dep.delay || 0;
-          z.delay  = Math.round(delaySec / 60);
-          z.status = dep.cancelled ? 'cancelled' : z.delay > 0 ? 'delayed' : 'ontime';
-          z.tripId = dep.tripId;
-          z.liveDirection = dep.direction || '';
+          z.delay    = Math.round((dep.delay||0) / 60);
+          z.status   = dep.cancelled ? 'cancelled' : z.delay > 0 ? 'delayed' : 'ontime';
+          z.tripId   = dep.tripId;
+          z.lineName = dep.line || z.lineName;
           updated++;
-
-          // Fire notification if delay just appeared and a notif is set
+          // Fire notif if newly delayed
           if (z.delay > 0 && notifPerm === 'granted') {
             const ns = (z.stops||[]).find(s => s.status==='upcoming'||s.status==='current');
             if (ns && z.notifs && z.notifs[ns.name]) {
               new Notification(`⚠️ Verspätung – ${z.von} → ${z.nach}`, {
-                body: `${z.delay} Min. Verspätung.`,
-                tag: 'delay-'+z.id,
+                body: `${z.delay} Min. Verspätung.`, tag:'delay-'+z.id,
               });
             }
           }
@@ -444,16 +584,16 @@ async function refreshLive() {
   btn.classList.remove('spinning');
   dot.className = 'live-dot';
   const now = new Date().toLocaleTimeString('de-AT',{hour:'2-digit',minute:'2-digit'});
-  lbl.textContent = `Aktualisiert ${now}${updated ? ' · '+updated+' Zug'+( updated===1?'':'züge')+' live' : ''}`;
+  lbl.textContent = `Aktualisiert ${now}${updated?' · '+updated+' live':''}`;
 
   const exp = [...document.querySelectorAll('.zug-card.expanded')].map(c=>+c.dataset.id);
   renderDay();
   exp.forEach(id => document.getElementById('zc-'+id)?.classList.add('expanded'));
 }
 
-// ── Tabs ──────────────────────────────────────────────────────────────────────
+// ── Tabs & Day ────────────────────────────────────────────────────────────────
 function renderTabs() {
-  document.getElementById('week-tabs').innerHTML = DAY_SHORT.map((s, i) => `
+  document.getElementById('week-tabs').innerHTML = DAY_SHORT.map((s,i) => `
     <div class="wtab ${i===activeDay?'active':''} ${i===TODAY?'today':''}" onclick="switchDay(${i})">
       <div class="wtab-short">${s}</div>
       <div class="wtab-name">${DAY_NAMES[i].slice(0,2)}</div>
@@ -462,42 +602,37 @@ function renderTabs() {
 }
 function switchDay(i) {
   activeDay = i;
-  renderTabs();
-  renderDay();
+  renderTabs(); renderDay();
   if (i === TODAY) refreshLive();
 }
 
-// ── Day view ──────────────────────────────────────────────────────────────────
 function renderDay() {
   document.getElementById('day-title').textContent = DAY_NAMES[activeDay];
   document.getElementById('day-sub').textContent =
-    activeDay === TODAY ? 'Heute' : activeDay === (TODAY+1)%7 ? 'Morgen' : '';
-  document.getElementById('modal-title').textContent =
-    'Zug hinzufügen — ' + DAY_NAMES[activeDay];
+    activeDay===TODAY ? 'Heute' : activeDay===(TODAY+1)%7 ? 'Morgen' : '';
 
-  const zuege = (data[activeDay]||[]).slice().sort((a,b) => a.dep.localeCompare(b.dep));
+  const zuege = (data[activeDay]||[]).slice().sort((a,b)=>a.dep.localeCompare(b.dep));
   const exp   = [...document.querySelectorAll('.zug-card.expanded')].map(c=>+c.dataset.id);
   const list  = document.getElementById('zug-list');
 
   if (!zuege.length) {
-    list.innerHTML = `<div class="empty"><div class="empty-icon">🚆</div>Keine Züge für ${DAY_NAMES[activeDay]}.<br>Tippe auf ＋ um einen hinzuzufügen.</div>`;
+    list.innerHTML = `<div class="empty"><div class="empty-icon">🚆</div>Keine Züge für ${DAY_NAMES[activeDay]}.<br>Tippe auf ＋ um einen Zug zu suchen.</div>`;
     return;
   }
   list.innerHTML = zuege.map(z => renderZug(z, exp.includes(z.id))).join('');
 }
 
 function renderZug(z, expanded) {
-  const dep  = z.delay > 0 ? addMins(z.dep, z.delay) : z.dep;
-  const cls  = z.status === 'cancelled' ? 'cancelled' : z.status === 'delayed' ? 'delayed' : 'ontime';
+  const dep = z.delay > 0 ? addMins(z.dep, z.delay) : z.dep;
+  const cls = z.status==='cancelled'?'cancelled': z.status==='delayed'?'delayed':'ontime';
   const hasStops = z.stops && z.stops.length > 1;
-
-  const stopRows = (z.stops||[]).map((s, i, arr) => {
-    const last = i === arr.length - 1;
-    const can  = s.status === 'upcoming' || s.status === 'current';
+  const stopRows = (z.stops||[]).map((s,i,arr) => {
+    const last = i===arr.length-1;
+    const can  = s.status==='upcoming'||s.status==='current';
     const nSet = z.notifs && z.notifs[s.name];
     const nb   = can
       ? `<button class="nb ${nSet?'set':''}" onclick="toggleNotif(event,${z.id},'${esc(s.name)}')">
-           ${nSet ? '🔔 '+nSet+'m' : '🔔'}
+           ${nSet?'🔔 '+nSet+'m':'🔔'}
          </button>`
       : `<span style="width:46px;display:inline-block"></span>`;
     return `
@@ -506,16 +641,15 @@ function renderZug(z, expanded) {
         <div class="stop-dot ${s.status}"></div>
         <div class="stop-name ${s.status}">${s.name}</div>
         <span class="stop-time ${s.delay?'delayed':''}">${s.time}${s.delay?' +'+s.delay+"'":''}
-        </span>
-        ${nb}
+        </span>${nb}
       </div>`;
   }).join('');
 
-  const metaParts = [];
-  if (z.arr) metaParts.push('Ankunft ' + (z.delay>0 ? addMins(z.arr,z.delay) : z.arr));
-  if (z.delay > 0) metaParts.push(`<span style="color:var(--amber)">+${z.delay} min</span>`);
-  if (z.status === 'cancelled') metaParts.push(`<span style="color:var(--red)">Entfällt</span>`);
-  if (z.liveDirection) metaParts.push(z.liveDirection);
+  const meta = [];
+  if (z.lineName) meta.push(z.lineName);
+  if (z.arr) meta.push('→ '+( z.delay>0 ? addMins(z.arr,z.delay) : z.arr));
+  if (z.delay>0) meta.push(`<span style="color:var(--amber)">+${z.delay} min</span>`);
+  if (z.status==='cancelled') meta.push(`<span style="color:var(--red)">Entfällt</span>`);
 
   return `
     <div class="zug-card ${cls} ${expanded?'expanded':''}" id="zc-${z.id}" data-id="${z.id}">
@@ -523,14 +657,14 @@ function renderZug(z, expanded) {
         <div class="zug-deptime ${cls}">${dep}</div>
         <div class="zug-info">
           <div class="zug-route">${z.von} → ${z.nach}</div>
-          ${metaParts.length ? `<div class="zug-meta">${metaParts.join(' · ')}</div>` : ''}
+          ${meta.length?`<div class="zug-meta">${meta.join(' · ')}</div>`:''}
         </div>
         <div class="zug-right">
           <button class="delete-btn" onclick="deleteZug(event,${z.id})">✕</button>
-          ${hasStops ? '<span class="chevron">▾</span>' : ''}
+          ${hasStops?'<span class="chevron">▾</span>':''}
         </div>
       </div>
-      ${hasStops ? `
+      ${hasStops?`
       <div class="zug-body">
         <div class="prog-wrap">
           <span class="prog-from">${z.von}</span>
@@ -551,155 +685,117 @@ function renderZug(z, expanded) {
 
 function toggleExpand(id) { document.getElementById('zc-'+id)?.classList.toggle('expanded'); }
 
-// ── CRUD ──────────────────────────────────────────────────────────────────────
 function deleteZug(e, id) {
   e.stopPropagation();
   if (!confirm('Zug löschen?')) return;
-  data[activeDay] = (data[activeDay]||[]).filter(z => z.id !== id);
-  save(); renderTabs(); renderDay();
-  toast('Zug gelöscht');
+  data[activeDay] = (data[activeDay]||[]).filter(z=>z.id!==id);
+  save(); renderTabs(); renderDay(); toast('Zug gelöscht');
+}
+
+// ── Modal steps ───────────────────────────────────────────────────────────────
+function goStep(n) {
+  document.querySelectorAll('.step').forEach((el,i) => el.classList.toggle('active', i===n-1));
+  document.getElementById('modal-title').textContent = n===1 ? 'Zug suchen' : 'Zug auswählen';
 }
 
 function openModal() {
-  ['m-von','m-nach','m-stops'].forEach(id => document.getElementById(id).value = '');
-  ['m-von-id','m-nach-id'].forEach(id => document.getElementById(id).value = '');
-  document.getElementById('m-dep').value = '';
-  document.getElementById('m-arr').value = '';
+  ['m-von','m-nach'].forEach(id => document.getElementById(id).value='');
+  ['m-von-id','m-nach-id'].forEach(id => document.getElementById(id).value='');
+  ['drop-von','drop-nach'].forEach(id => document.getElementById(id).classList.add('hidden'));
+  goStep(1);
   document.getElementById('modal').classList.add('open');
 }
 function closeModal() {
   document.getElementById('modal').classList.remove('open');
-  document.getElementById('drop-von').classList.add('hidden');
-  document.getElementById('drop-nach').classList.add('hidden');
+  ['drop-von','drop-nach'].forEach(id => document.getElementById(id).classList.add('hidden'));
 }
-
-function saveZug() {
-  const von   = document.getElementById('m-von').value.trim();
-  const nach  = document.getElementById('m-nach').value.trim();
-  const vonId = document.getElementById('m-von-id').value.trim();
-  const dep   = document.getElementById('m-dep').value;
-  const arr   = document.getElementById('m-arr').value;
-  const raw   = document.getElementById('m-stops').value.trim();
-
-  if (!von || !nach || !dep) { toast('Bitte Von, Nach und Abfahrtszeit ausfüllen'); return; }
-
-  const middle = raw ? raw.split(',').map(s=>s.trim()).filter(Boolean)
-    .map(name => ({name, time:'—', status:'upcoming'})) : [];
-  const stops = [
-    {name:von,  time:dep,     status:'upcoming'},
-    ...middle,
-    {name:nach, time:arr||'—', status:'upcoming'},
-  ];
-
-  if (!data[activeDay]) data[activeDay] = [];
-  data[activeDay].push({
-    id:nextId++, von, nach, vonId, dep, arr,
-    delay:0, status:'ontime', progress:0,
-    stops, notifs:{}, notifMins:5
-  });
-  save(); renderTabs(); renderDay();
-  closeModal();
-  toast('✓ Gespeichert für ' + DAY_NAMES[activeDay]);
-}
+// close on backdrop tap
+document.getElementById('modal').addEventListener('click', e => { if(e.target.id==='modal') closeModal(); });
+// close dropdowns on outside click
+document.addEventListener('click', e => {
+  if (!e.target.closest('.station-wrap')) {
+    document.querySelectorAll('.station-dropdown').forEach(d=>d.classList.add('hidden'));
+  }
+});
 
 // ── Notifications ─────────────────────────────────────────────────────────────
 function toggleNotif(e, id, stopName) {
   e.stopPropagation();
-  const z = (data[activeDay]||[]).find(z => z.id === id);
+  const z = (data[activeDay]||[]).find(z=>z.id===id);
   if (!z) return;
-  if (!z.notifs) z.notifs = {};
-  const wasExpanded = !!document.getElementById('zc-'+id)?.classList.contains('expanded');
-
+  if (!z.notifs) z.notifs={};
+  const wasExp = !!document.getElementById('zc-'+id)?.classList.contains('expanded');
   if (z.notifs[stopName]) {
-    delete z.notifs[stopName];
-    save(); toast('Alarm für ' + stopName + ' entfernt');
+    delete z.notifs[stopName]; save(); toast('Alarm für '+stopName+' entfernt');
   } else {
-    if (notifPerm !== 'granted') { toast('Bitte zuerst Push erlauben — tippe auf 🔔 oben rechts'); return; }
-    z.notifs[stopName] = z.notifMins || 5;
-    save(); toast('🔔 Alarm: ' + z.notifMins + ' Min. vor ' + stopName);
-    setTimeout(() => {
-      if (notifPerm === 'granted')
-        new Notification('Train Tracker – ' + z.von + ' → ' + z.nach, {
-          body: 'Ankunft in ' + stopName + ' in ' + z.notifMins + ' Minuten' +
-                (z.delay > 0 ? ' (aktuell +' + z.delay + ' min Verspätung)' : ''),
-          tag: 'oebb-'+id+'-'+stopName,
+    if (notifPerm!=='granted') { toast('Bitte zuerst Push erlauben — tippe auf 🔔 oben rechts'); return; }
+    z.notifs[stopName] = z.notifMins||5; save();
+    toast('🔔 Alarm: '+z.notifMins+' Min. vor '+stopName);
+    setTimeout(()=>{
+      if (notifPerm==='granted')
+        new Notification('Train Tracker – '+z.von+' → '+z.nach, {
+          body:'Ankunft in '+stopName+' in '+z.notifMins+' Minuten'+(z.delay>0?' (+'+z.delay+' min Verspätung)':''),
+          tag:'oebb-'+id+'-'+stopName,
         });
     }, 4000);
   }
   renderDay();
-  if (wasExpanded) document.getElementById('zc-'+id)?.classList.add('expanded');
+  if (wasExp) document.getElementById('zc-'+id)?.classList.add('expanded');
 }
-
 function setNotifMins(id, val) {
-  const z = (data[activeDay]||[]).find(z => z.id === id);
-  if (z) { z.notifMins = parseInt(val)||5; save(); }
+  const z=(data[activeDay]||[]).find(z=>z.id===id);
+  if(z){z.notifMins=parseInt(val)||5;save();}
 }
-
 async function requestNotifPermission() {
-  if (!('Notification' in window)) { toast('Browser unterstützt keine Push-Benachrichtigungen'); return; }
+  if(!('Notification' in window)){toast('Browser unterstützt keine Push-Benachrichtigungen');return;}
   const res = await Notification.requestPermission();
-  notifPerm = res;
-  updateNotifBtn();
-  if (res === 'granted') {
+  notifPerm = res; updateNotifBtn();
+  if(res==='granted'){
     toast('✓ Push-Benachrichtigungen aktiviert!');
     document.getElementById('perm-banner').classList.add('hidden');
-    setTimeout(() => new Notification('Train Tracker bereit', {
-      body: 'Du bekommst jetzt Alarm bevor dein Zug einfährt.'
-    }), 500);
-  } else if (res === 'denied') {
-    toast('Blockiert — in Browser-Einstellungen erlauben');
-  }
+    setTimeout(()=>new Notification('Train Tracker bereit',{body:'Du bekommst jetzt Alarm bevor dein Zug einfährt.'}),500);
+  } else if(res==='denied'){ toast('Blockiert — in Browser-Einstellungen erlauben'); }
 }
-
-function updateNotifBtn() {
-  const icon = document.getElementById('notif-icon');
-  const lbl  = document.getElementById('notif-label');
-  const ban  = document.getElementById('perm-banner');
-  if (notifPerm === 'granted')     { icon.textContent='🔔'; lbl.textContent='AN';        ban.classList.add('hidden'); }
-  else if (notifPerm === 'denied') { icon.textContent='🔕'; lbl.textContent='BLOCKIERT'; ban.classList.add('hidden'); }
-  else                             { icon.textContent='🔔'; lbl.textContent='ERLAUBEN';  ban.classList.remove('hidden'); }
+function updateNotifBtn(){
+  const icon=document.getElementById('notif-icon');
+  const lbl=document.getElementById('notif-label');
+  const ban=document.getElementById('perm-banner');
+  if(notifPerm==='granted')    {icon.textContent='🔔';lbl.textContent='AN';       ban.classList.add('hidden');}
+  else if(notifPerm==='denied'){icon.textContent='🔕';lbl.textContent='BLOCKIERT';ban.classList.add('hidden');}
+  else                         {icon.textContent='🔔';lbl.textContent='ERLAUBEN'; ban.classList.remove('hidden');}
 }
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
-function addMins(t, m) {
-  if (!t || !t.includes(':')) return t;
-  const [h, mm] = t.split(':').map(Number);
-  const tot = h*60 + mm + m;
+function addMins(t,m){
+  if(!t||!t.includes(':'))return t;
+  const [h,mm]=t.split(':').map(Number);
+  const tot=h*60+mm+m;
   return String(Math.floor(tot/60)).padStart(2,'0')+':'+String(tot%60).padStart(2,'0');
 }
-function fmtTime(date) {
+function fmtTime(date){
   return String(date.getHours()).padStart(2,'0')+':'+String(date.getMinutes()).padStart(2,'0');
 }
-function esc(s) { return (s||'').replace(/\\/g,'\\\\').replace(/'/g,"\\'"); }
-function toast(msg) {
-  const c = document.getElementById('toasts');
-  const t = document.createElement('div');
-  t.className='toast'; t.textContent=msg; c.appendChild(t);
-  setTimeout(()=>t.remove(), 3500);
+function esc(s){return(s||'').replace(/\\/g,'\\\\').replace(/'/g,"\\'");}
+function toast(msg){
+  const c=document.getElementById('toasts');
+  const t=document.createElement('div');
+  t.className='toast';t.textContent=msg;c.appendChild(t);
+  setTimeout(()=>t.remove(),3500);
 }
-
-// Clock
 setInterval(()=>{
-  document.getElementById('clock').textContent =
+  document.getElementById('clock').textContent=
     new Date().toLocaleTimeString('de-AT',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
-}, 1000);
-document.getElementById('clock').textContent =
+},1000);
+document.getElementById('clock').textContent=
   new Date().toLocaleTimeString('de-AT',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
-
-// Auto-refresh live every 60 seconds when on today's tab
-setInterval(()=>{ if (activeDay === TODAY) refreshLive(); }, 60000);
+setInterval(()=>{ if(activeDay===TODAY) refreshLive(); }, 60000);
 
 // ── Init ──────────────────────────────────────────────────────────────────────
-initApiBanner();
-updateNotifBtn();
-renderTabs();
-renderDay();
+initApiBanner(); updateNotifBtn(); renderTabs(); renderDay();
 setTimeout(()=>{
-  (data[activeDay]||[]).forEach(z =>
-    document.getElementById('zc-'+z.id)?.classList.add('expanded')
-  );
-  if (activeDay === TODAY) refreshLive();
-}, 150);
+  (data[activeDay]||[]).forEach(z=>document.getElementById('zc-'+z.id)?.classList.add('expanded'));
+  if(activeDay===TODAY) refreshLive();
+},150);
 </script>
 </body>
 </html>
