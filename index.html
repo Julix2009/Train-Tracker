@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#e2001a">
+  <title>Train Tracker</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --red:#e2001a; --red-d:#b8001a; --green:#1e8c35; --amber:#c47a00;
+      --fn:'Syne',system-ui,sans-serif; --fm:'DM Mono',monospace;
+      --bg:#fff; --bg2:#f5f5f3; --bg3:#eeecea;
+      --txt:#1a1a18; --txt2:#6b6b67; --txt3:#a0a09a;
+      --brd:rgba(0,0,0,.10); --brd2:rgba(0,0,0,.18);
+      --r:12px; --rs:8px;
+    }
+    @media (prefers-color-scheme:dark){:root{
+      --bg:#1c1c1a;--bg2:#252523;--bg3:#2e2e2b;
+      --txt:#e8e8e2;--txt2:#9a9a94;--txt3:#66665f;
+      --brd:rgba(255,255,255,.10);--brd2:rgba(255,255,255,.18);
+    }}
+    html,body{min-height:100%;background:var(--bg3);font-family:var(--fn);color:var(--txt);}
+    .app{max-width:480px;margin:0 auto;min-height:100vh;background:var(--bg);}
+
+    /* ── Header ── */
+    .hdr{background:var(--red);padding:1rem 1.25rem .85rem;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:50;}
+    .logo{color:#fff;}
+    .logo-main{font-size:17px;font-weight:600;letter-spacing:-.3px;}
+    .logo-sub{font-size:11px;opacity:.8;letter-spacing:.5px;margin-top:1px;}
+    .hdr-right{margin-left:auto;display:flex;align-items:center;gap:8px;}
+    .clock{font-family:var(--fm);font-size:12px;color:rgba(255,255,255,.8);letter-spacing:1px;}
+    .notif-btn{display:flex;align-items:center;gap:5px;background:rgba(0,0,0,.2);border:none;border-radius:20px;padding:5px 10px;cursor:pointer;color:rgba(255,255,255,.9);font-family:var(--fm);font-size:10px;letter-spacing:.5px;transition:background .15s;}
+    .notif-btn:hover{background:rgba(0,0,0,.35);}
+
+    /* ── API Banner ── */
+    .api-banner{margin:1rem 1.25rem 0;background:rgba(226,0,26,.07);border:.5px solid rgba(226,0,26,.25);border-radius:var(--rs);padding:10px 14px;}
+    .api-banner.hidden{display:none;}
+    .api-banner-title{font-size:12px;font-weight:500;color:var(--red);margin-bottom:6px;}
+    .api-row{display:flex;gap:6px;align-items:center;}
+    .api-input{flex:1;font-family:var(--fm);font-size:11px;padding:5px 8px;border:.5px solid var(--brd2);border-radius:var(--rs);background:var(--bg);color:var(--txt);}
+    .api-save{background:var(--red);color:#fff;border:none;border-radius:var(--rs);padding:5px 10px;font-size:11px;font-family:var(--fn);font-weight:500;cursor:pointer;white-space:nowrap;}
+    .api-hint{font-size:10px;color:var(--txt2);margin-top:5px;font-family:var(--fm);}
+    .api-hint a{color:var(--red);}
+
+    /* ── Perm banner ── */
+    .perm-banner{margin:.75rem 1.25rem 0;background:rgba(0,0,0,.04);border:.5px solid var(--brd);border-radius:var(--rs);padding:9px 14px;display:flex;align-items:center;gap:10px;cursor:pointer;}
+    .perm-banner.hidden{display:none;}
+    .perm-text{flex:1;font-size:12px;color:var(--txt2);}
+    .perm-ok{background:var(--red);color:#fff;border:none;border-radius:var(--rs);padding:5px 10px;font-size:11px;font-family:var(--fn);font-weight:500;cursor:pointer;}
+
+    /* ── Week tabs ── */
+    .week-tabs{display:flex;border-bottom:.5px solid var(--brd);background:var(--bg2);overflow-x:auto;scrollbar-width:none;margin-top:.75rem;}
+    .week-tabs::-webkit-scrollbar{display:none;}
+    .wtab{flex:1;min-width:44px;padding:10px 4px 8px;text-align:center;cursor:pointer;border-bottom:2px solid transparent;transition:all .15s;color:var(--txt2);user-select:none;}
+    .wtab:hover{background:var(--bg);color:var(--txt);}
+    .wtab.active{border-bottom-color:var(--red);color:var(--red);background:var(--bg);}
+    .wtab-short{font-family:var(--fm);font-size:10px;letter-spacing:.5px;}
+    .wtab-name{font-size:12px;font-weight:500;margin-top:2px;}
+    .wtab.today .wtab-name{color:var(--red);}
+    .wtab-dot{width:4px;height:4px;border-radius:50%;background:var(--red);margin:4px auto 0;opacity:0;}
+    .wtab-dot.has{opacity:1;}
+
+    /* ── Body ── */
+    .body{padding:1rem 1.25rem 5rem;}
+    .day-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
+    .day-title{font-size:17px;font-weight:600;}
+    .day-sub{font-size:12px;color:var(--txt2);font-family:var(--fm);}
+    .refresh-btn{display:flex;align-items:center;gap:5px;background:none;border:.5px solid var(--brd2);border-radius:var(--rs);padding:5px 10px;font-size:11px;font-family:var(--fm);cursor:pointer;color:var(--txt2);transition:all .15s;}
+    .refresh-btn:hover{border-color:var(--red);color:var(--red);}
+    .refresh-btn.spinning svg{animation:spin .7s linear infinite;}
+    @keyframes spin{to{transform:rotate(360deg)}}
+
+    /* ── Live status bar ── */
+    .live-bar{display:flex;align-items:center;gap:6px;margin-bottom:10px;font-size:11px;color:var(--txt2);font-family:var(--fm);}
+    .live-dot{width:6px;height:6px;border-radius:50%;background:var(--green);flex-shrink:0;}
+    .live-dot.loading{background:var(--amber);animation:pulse 1s ease-in-out infinite;}
+    .live-dot.error{background:var(--red);}
+    @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+
+    /* ── Zug card ── */
+    .zug-card{background:var(--bg);border:.5px solid var(--brd);border-radius:var(--r);margin-bottom:10px;overflow:hidden;transition:border-color .15s;}
+    .zug-card:hover{border-color:var(--brd2);}
+    .zug-card.delayed{border-left:3px solid var(--amber);}
+    .zug-card.ontime{border-left:3px solid var(--green);}
+    .zug-card.cancelled{border-left:3px solid var(--red);opacity:.65;}
+    .zug-top{padding:13px 14px;display:flex;align-items:center;gap:12px;cursor:pointer;user-select:none;}
+    .zug-deptime{font-family:var(--fm);font-size:23px;font-weight:500;letter-spacing:-1px;flex-shrink:0;min-width:60px;}
+    .zug-deptime.delayed{color:var(--amber);}
+    .zug-deptime.ontime{color:var(--green);}
+    .zug-deptime.cancelled{color:var(--red);text-decoration:line-through;}
+    .zug-info{flex:1;min-width:0;}
+    .zug-route{font-size:14px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+    .zug-meta{font-size:11px;color:var(--txt2);font-family:var(--fm);margin-top:2px;}
+    .zug-right{display:flex;align-items:center;gap:4px;flex-shrink:0;}
+    .delete-btn{background:none;border:none;color:var(--txt3);font-size:14px;cursor:pointer;padding:4px 6px;line-height:1;transition:color .15s;border-radius:4px;}
+    .delete-btn:hover{color:var(--red);background:rgba(226,0,26,.07);}
+    .chevron{font-size:11px;color:var(--txt3);transition:transform .2s;padding:4px;}
+    .zug-card.expanded .chevron{transform:rotate(180deg);}
+
+    /* ── Card body ── */
+    .zug-body{display:none;border-top:.5px solid var(--brd);}
+    .zug-card.expanded .zug-body{display:block;}
+
+    /* Progress */
+    .prog-wrap{padding:10px 14px 6px;display:flex;align-items:center;gap:8px;}
+    .prog-from,.prog-to{font-family:var(--fm);font-size:10px;color:var(--txt2);flex-shrink:0;max-width:80px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+    .prog-bar{flex:1;height:4px;background:var(--brd);border-radius:2px;overflow:hidden;}
+    .prog-fill{height:100%;background:var(--red);border-radius:2px;transition:width .5s;}
+    .prog-pct{font-family:var(--fm);font-size:9px;color:var(--txt3);flex-shrink:0;}
+
+    /* Stops */
+    .stops{padding:6px 14px 10px;}
+    .stop-row{display:flex;align-items:center;gap:8px;padding:5px 0;position:relative;}
+    .stop-line-v{position:absolute;left:9px;top:0;bottom:0;width:1.5px;background:var(--brd);z-index:0;}
+    .stop-line-v.passed{background:#888;}
+    .stop-dot{width:10px;height:10px;border-radius:50%;border:2px solid var(--brd2);background:var(--bg);flex-shrink:0;z-index:1;position:relative;}
+    .stop-dot.passed{background:#888;border-color:#888;}
+    .stop-dot.current{background:var(--bg);border:2.5px solid var(--red);animation:ring 1.5s ease-in-out infinite;}
+    @keyframes ring{0%,100%{box-shadow:0 0 0 3px rgba(226,0,26,.15)}50%{box-shadow:0 0 0 6px rgba(226,0,26,0)}}
+    .stop-name{font-size:12px;flex:1;color:var(--txt2);}
+    .stop-name.current{font-weight:500;color:var(--red);}
+    .stop-name.upcoming{color:var(--txt);}
+    .stop-time{font-family:var(--fm);font-size:11px;color:var(--txt2);text-align:right;min-width:42px;}
+    .stop-time.delayed{color:var(--amber);}
+    .nb{background:none;border:.5px solid var(--brd2);border-radius:4px;padding:2px 7px;font-size:10px;font-family:var(--fm);cursor:pointer;color:var(--txt2);transition:all .12s;white-space:nowrap;}
+    .nb:hover{border-color:var(--red);color:var(--red);background:rgba(226,0,26,.06);}
+    .nb.set{background:rgba(226,0,26,.1);border-color:rgba(226,0,26,.4);color:var(--red);}
+
+    /* Notif mins */
+    .notif-mins-row{padding:8px 14px;border-top:.5px solid var(--brd);display:flex;align-items:center;gap:8px;background:var(--bg2);font-size:12px;color:var(--txt2);}
+    .notif-mins-row input{width:52px;font-family:var(--fm);font-size:12px;padding:4px 6px;border:.5px solid var(--brd2);border-radius:var(--rs);background:var(--bg);color:var(--txt);}
+
+    /* Add card */
+    .add-card{border:.5px dashed var(--brd2);border-radius:var(--r);padding:16px;text-align:center;cursor:pointer;color:var(--txt2);font-size:13px;transition:all .15s;}
+    .add-card:hover{border-color:var(--red);color:var(--red);background:rgba(226,0,26,.04);}
+    .add-card .plus{font-size:22px;margin-bottom:4px;}
+
+    /* Empty / skeleton */
+    .empty{text-align:center;padding:2.5rem 1rem;color:var(--txt2);font-size:13px;line-height:1.7;}
+    .empty-icon{font-size:36px;margin-bottom:8px;opacity:.4;}
+    .skeleton{background:var(--bg2);border-radius:var(--r);height:72px;margin-bottom:10px;animation:shimmer 1.2s ease-in-out infinite;}
+    @keyframes shimmer{0%,100%{opacity:.6}50%{opacity:1}}
+
+    /* Modal */
+    .modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:200;align-items:center;justify-content:center;padding:1rem;}
+    .modal-bg.open{display:flex;}
+    .modal{background:var(--bg);border-radius:var(--r);padding:1.25rem;width:100%;max-width:340px;border:.5px solid var(--brd2);max-height:90vh;overflow-y:auto;}
+    .modal-title{font-size:15px;font-weight:500;margin-bottom:1rem;}
+    .fl{margin-bottom:10px;}
+    .fl label{font-family:var(--fm);font-size:10px;letter-spacing:.8px;color:var(--txt3);text-transform:uppercase;display:block;margin-bottom:4px;}
+    .fl input,.fl select{width:100%;font-family:var(--fn);font-size:13px;padding:8px 10px;border:.5px solid var(--brd2);border-radius:var(--rs);background:var(--bg2);color:var(--txt);}
+    .fl-row{display:flex;gap:8px;}
+    .fl-row .fl{flex:1;}
+
+    /* Station search dropdown */
+    .station-wrap{position:relative;}
+    .station-dropdown{position:absolute;top:100%;left:0;right:0;background:var(--bg);border:.5px solid var(--brd2);border-radius:var(--rs);z-index:100;max-height:180px;overflow-y:auto;margin-top:2px;}
+    .station-option{padding:9px 12px;font-size:13px;cursor:pointer;border-bottom:.5px solid var(--brd);}
+    .station-option:last-child{border-bottom:none;}
+    .station-option:hover{background:var(--bg2);}
+    .station-id{font-family:var(--fm);font-size:10px;color:var(--txt3);margin-left:6px;}
+
+    .modal-acts{display:flex;gap:8px;margin-top:1rem;}
+    .modal-acts button{flex:1;padding:9px;border-radius:var(--rs);font-family:var(--fn);font-size:13px;cursor:pointer;}
+    .btn-c{background:none;border:.5px solid var(--brd2);color:var(--txt2);}
+    .btn-s{background:var(--red);border:none;color:#fff;font-weight:500;}
+    .btn-s:hover{background:var(--red-d);}
+
+    /* Toast */
+    .toasts{position:fixed;bottom:16px;left:50%;transform:translateX(-50%);z-index:300;display:flex;flex-direction:column;gap:6px;align-items:center;pointer-events:none;}
+    .toast{background:var(--bg);border:.5px solid var(--brd2);border-left:3px solid var(--red);border-radius:var(--rs);padding:9px 16px;font-size:13px;white-space:nowrap;animation:sup .22s ease;pointer-events:all;color:var(--txt);}
+    @keyframes sup{from{transform:translateY(16px);opacity:0}to{transform:translateY(0);opacity:1}}
+  </style>
+</head>
+<body>
+<div class="app">
+
+  <!-- Header -->
+  <div class="hdr">
+    <div class="logo">
+      <div class="logo-main">Train Tracker</div>
+      <div class="logo-sub">Meine Züge</div>
+    </div>
+    <div class="hdr-right">
+      <span class="clock" id="clock"></span>
+      <button class="notif-btn" id="notif-btn" onclick="requestNotifPermission()">
+        <span id="notif-icon">🔔</span>
+        <span id="notif-label">PUSH</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- API URL Banner -->
+  <div class="api-banner" id="api-banner">
+    <div class="api-banner-title">🔗 API-Server URL eintragen</div>
+    <div class="api-row">
+      <input class="api-input" type="text" id="api-url-input"
+        placeholder="https://train-tracker-api.onrender.com">
+      <button class="api-save" onclick="saveApiUrl()">Speichern</button>
+    </div>
+    <div class="api-hint">
+      Deine Render.com URL — dann kommen echte ÖBB-Daten.<br>
+      Noch kein Server? <a href="https://github.com" target="_blank">Anleitung im README</a>
+    </div>
+  </div>
+
+  <!-- Perm banner -->
+  <div class="perm-banner hidden" id="perm-banner" onclick="requestNotifPermission()">
+    <div class="perm-text">🔔 Push-Benachrichtigungen aktivieren</div>
+    <button class="perm-ok">Erlauben</button>
+  </div>
+
+  <!-- Week tabs -->
+  <div class="week-tabs" id="week-tabs"></div>
+
+  <!-- Body -->
+  <div class="body">
+    <div class="day-header">
+      <div>
+        <div class="day-title" id="day-title"></div>
+        <div class="day-sub"   id="day-sub"></div>
+      </div>
+      <button class="refresh-btn" id="refresh-btn" onclick="refreshLive()">
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+          <path d="M10.5 2A5 5 0 1 0 11 6"/>
+          <path d="M11 2V5H8"/>
+        </svg>
+        Aktualisieren
+      </button>
+    </div>
+    <div class="live-bar hidden" id="live-bar">
+      <div class="live-dot" id="live-dot"></div>
+      <span id="live-label">Live</span>
+    </div>
+    <div id="zug-list"></div>
+    <div class="add-card" onclick="openModal()">
+      <div class="plus">＋</div>
+      Zug hinzufügen
+    </div>
+  </div>
+</div>
+
+<!-- Add modal -->
+<div class="modal-bg" id="modal">
+  <div class="modal">
+    <div class="modal-title" id="modal-title">Zug hinzufügen</div>
+
+    <div class="fl">
+      <label>Von (Startbahnhof)</label>
+      <div class="station-wrap">
+        <input type="text" id="m-von" placeholder="Bahnhof suchen…" autocomplete="off"
+          oninput="searchStation('von', this.value)">
+        <div class="station-dropdown hidden" id="drop-von"></div>
+      </div>
+      <input type="hidden" id="m-von-id">
+    </div>
+
+    <div class="fl">
+      <label>Nach (Zielbahnhof)</label>
+      <div class="station-wrap">
+        <input type="text" id="m-nach" placeholder="Bahnhof suchen…" autocomplete="off"
+          oninput="searchStation('nach', this.value)">
+        <div class="station-dropdown hidden" id="drop-nach"></div>
+      </div>
+      <input type="hidden" id="m-nach-id">
+    </div>
+
+    <div class="fl-row">
+      <div class="fl">
+        <label>Abfahrt</label>
+        <input type="time" id="m-dep">
+      </div>
+      <div class="fl">
+        <label>Ankunft (optional)</label>
+        <input type="time" id="m-arr">
+      </div>
+    </div>
+
+    <div class="fl">
+      <label>Zwischenhalte (kommagetrennt, optional)</label>
+      <input type="text" id="m-stops" placeholder="z.B. Wildon, Leoben Hbf, Zeltweg">
+    </div>
+
+    <div class="modal-acts">
+      <button class="btn-c" onclick="closeModal()">Abbrechen</button>
+      <button class="btn-s" onclick="saveZug()">Speichern</button>
+    </div>
+  </div>
+</div>
+
+<div class="toasts" id="toasts"></div>
+
+<script>
+// ── Config ───────────────────────────────────────────────────────────────────
+const DAY_NAMES = ['Montag','Dienstag','Mittwoch','Donnerstag','Freitag','Samstag','Sonntag'];
+const DAY_SHORT = ['Mo','Di','Mi','Do','Fr','Sa','So'];
+const TODAY     = (new Date().getDay() + 6) % 7;
+
+let activeDay  = TODAY;
+let nextId     = 100;
+let notifPerm  = Notification.permission;
+let liveData   = {}; // tripId -> live departure info
+let searchTimer = null;
+
+// ── API URL ───────────────────────────────────────────────────────────────────
+function getApiUrl() {
+  return localStorage.getItem('oebb-api-url') || '';
+}
+function saveApiUrl() {
+  const val = document.getElementById('api-url-input').value.trim().replace(/\/$/, '');
+  if (!val) { toast('Bitte URL eingeben'); return; }
+  localStorage.setItem('oebb-api-url', val);
+  document.getElementById('api-banner').classList.add('hidden');
+  toast('✓ API-URL gespeichert');
+  refreshLive();
+}
+function initApiBanner() {
+  const url = getApiUrl();
+  const banner = document.getElementById('api-banner');
+  if (url) {
+    banner.classList.add('hidden');
+  } else {
+    banner.classList.remove('hidden');
+  }
+  if (url) document.getElementById('api-url-input').value = url;
+}
+
+// ── Load / Save ───────────────────────────────────────────────────────────────
+function loadData() {
+  try {
+    const raw = localStorage.getItem('oebb-v3');
+    if (raw) {
+      const d = JSON.parse(raw);
+      Object.values(d).forEach(arr =>
+        arr.forEach(z => { if (z.id >= nextId) nextId = z.id + 1; })
+      );
+      return d;
+    }
+  } catch(e) {}
+  return { 0:[], 1:[], 2:[], 3:[], 4:[], 5:[], 6:[] };
+}
+const data = loadData();
+function save() {
+  try { localStorage.setItem('oebb-v3', JSON.stringify(data)); } catch(e) {}
+}
+
+// ── Live API calls ────────────────────────────────────────────────────────────
+async function apiFetch(path) {
+  const base = getApiUrl();
+  if (!base) return null;
+  try {
+    const res = await fetch(base + path);
+    if (!res.ok) return null;
+    return await res.json();
+  } catch(e) {
+    return null;
+  }
+}
+
+async function searchStation(field, query) {
+  clearTimeout(searchTimer);
+  const drop = document.getElementById('drop-' + field);
+  if (!query || query.length < 2) { drop.classList.add('hidden'); return; }
+  searchTimer = setTimeout(async () => {
+    const results = await apiFetch('/stations?query=' + encodeURIComponent(query));
+    if (!results || !results.length) { drop.classList.add('hidden'); return; }
+    drop.innerHTML = results.map(s => `
+      <div class="station-option" onclick="selectStation('${field}','${esc(s.name)}','${s.id}')">
+        ${s.name}
+      </div>`).join('');
+    drop.classList.remove('hidden');
+  }, 300);
+}
+
+function selectStation(field, name, id) {
+  document.getElementById('m-' + field).value = name;
+  document.getElementById('m-' + field + '-id').value = id;
+  document.getElementById('drop-' + field).classList.add('hidden');
+}
+
+async function refreshLive() {
+  const apiUrl = getApiUrl();
+  const btn = document.getElementById('refresh-btn');
+  const bar = document.getElementById('live-bar');
+  const dot = document.getElementById('live-dot');
+  const lbl = document.getElementById('live-label');
+
+  if (!apiUrl) { toast('Bitte zuerst API-URL eintragen (roter Bereich oben)'); return; }
+
+  btn.classList.add('spinning');
+  bar.classList.remove('hidden');
+  dot.className = 'live-dot loading';
+  lbl.textContent = 'Lädt…';
+
+  // Collect all stationIds from today's trains
+  const zuege = (data[activeDay] || []);
+  if (!zuege.length) {
+    btn.classList.remove('spinning');
+    dot.className = 'live-dot';
+    lbl.textContent = 'Keine Züge heute';
+    return;
+  }
+
+  // Fetch departures for all unique from-stations
+  const stationIds = [...new Set(zuege.map(z => z.vonId).filter(Boolean))];
+  let updated = 0;
+
+  for (const sid of stationIds) {
+    const deps = await apiFetch(`/departures?stationId=${sid}&duration=180`);
+    if (!deps) continue;
+
+    deps.forEach(dep => {
+      // Try to match to a saved train by planned departure time
+      const depTime = dep.plannedWhen ? fmtTime(new Date(dep.plannedWhen)) : null;
+      if (!depTime) return;
+
+      zuege.forEach(z => {
+        if (z.vonId === sid && z.dep === depTime) {
+          const delaySec = dep.delay || 0;
+          z.delay  = Math.round(delaySec / 60);
+          z.status = dep.cancelled ? 'cancelled' : z.delay > 0 ? 'delayed' : 'ontime';
+          z.tripId = dep.tripId;
+          z.liveDirection = dep.direction || '';
+          updated++;
+
+          // Fire notification if delay just appeared and a notif is set
+          if (z.delay > 0 && notifPerm === 'granted') {
+            const ns = (z.stops||[]).find(s => s.status==='upcoming'||s.status==='current');
+            if (ns && z.notifs && z.notifs[ns.name]) {
+              new Notification(`⚠️ Verspätung – ${z.von} → ${z.nach}`, {
+                body: `${z.delay} Min. Verspätung.`,
+                tag: 'delay-'+z.id,
+              });
+            }
+          }
+        }
+      });
+    });
+  }
+
+  save();
+  btn.classList.remove('spinning');
+  dot.className = 'live-dot';
+  const now = new Date().toLocaleTimeString('de-AT',{hour:'2-digit',minute:'2-digit'});
+  lbl.textContent = `Aktualisiert ${now}${updated ? ' · '+updated+' Zug'+( updated===1?'':'züge')+' live' : ''}`;
+
+  const exp = [...document.querySelectorAll('.zug-card.expanded')].map(c=>+c.dataset.id);
+  renderDay();
+  exp.forEach(id => document.getElementById('zc-'+id)?.classList.add('expanded'));
+}
+
+// ── Tabs ──────────────────────────────────────────────────────────────────────
+function renderTabs() {
+  document.getElementById('week-tabs').innerHTML = DAY_SHORT.map((s, i) => `
+    <div class="wtab ${i===activeDay?'active':''} ${i===TODAY?'today':''}" onclick="switchDay(${i})">
+      <div class="wtab-short">${s}</div>
+      <div class="wtab-name">${DAY_NAMES[i].slice(0,2)}</div>
+      <div class="wtab-dot ${(data[i]||[]).length?'has':''}"></div>
+    </div>`).join('');
+}
+function switchDay(i) {
+  activeDay = i;
+  renderTabs();
+  renderDay();
+  if (i === TODAY) refreshLive();
+}
+
+// ── Day view ──────────────────────────────────────────────────────────────────
+function renderDay() {
+  document.getElementById('day-title').textContent = DAY_NAMES[activeDay];
+  document.getElementById('day-sub').textContent =
+    activeDay === TODAY ? 'Heute' : activeDay === (TODAY+1)%7 ? 'Morgen' : '';
+  document.getElementById('modal-title').textContent =
+    'Zug hinzufügen — ' + DAY_NAMES[activeDay];
+
+  const zuege = (data[activeDay]||[]).slice().sort((a,b) => a.dep.localeCompare(b.dep));
+  const exp   = [...document.querySelectorAll('.zug-card.expanded')].map(c=>+c.dataset.id);
+  const list  = document.getElementById('zug-list');
+
+  if (!zuege.length) {
+    list.innerHTML = `<div class="empty"><div class="empty-icon">🚆</div>Keine Züge für ${DAY_NAMES[activeDay]}.<br>Tippe auf ＋ um einen hinzuzufügen.</div>`;
+    return;
+  }
+  list.innerHTML = zuege.map(z => renderZug(z, exp.includes(z.id))).join('');
+}
+
+function renderZug(z, expanded) {
+  const dep  = z.delay > 0 ? addMins(z.dep, z.delay) : z.dep;
+  const cls  = z.status === 'cancelled' ? 'cancelled' : z.status === 'delayed' ? 'delayed' : 'ontime';
+  const hasStops = z.stops && z.stops.length > 1;
+
+  const stopRows = (z.stops||[]).map((s, i, arr) => {
+    const last = i === arr.length - 1;
+    const can  = s.status === 'upcoming' || s.status === 'current';
+    const nSet = z.notifs && z.notifs[s.name];
+    const nb   = can
+      ? `<button class="nb ${nSet?'set':''}" onclick="toggleNotif(event,${z.id},'${esc(s.name)}')">
+           ${nSet ? '🔔 '+nSet+'m' : '🔔'}
+         </button>`
+      : `<span style="width:46px;display:inline-block"></span>`;
+    return `
+      <div class="stop-row">
+        ${!last?`<div class="stop-line-v ${s.status==='passed'?'passed':''}"></div>`:''}
+        <div class="stop-dot ${s.status}"></div>
+        <div class="stop-name ${s.status}">${s.name}</div>
+        <span class="stop-time ${s.delay?'delayed':''}">${s.time}${s.delay?' +'+s.delay+"'":''}
+        </span>
+        ${nb}
+      </div>`;
+  }).join('');
+
+  const metaParts = [];
+  if (z.arr) metaParts.push('Ankunft ' + (z.delay>0 ? addMins(z.arr,z.delay) : z.arr));
+  if (z.delay > 0) metaParts.push(`<span style="color:var(--amber)">+${z.delay} min</span>`);
+  if (z.status === 'cancelled') metaParts.push(`<span style="color:var(--red)">Entfällt</span>`);
+  if (z.liveDirection) metaParts.push(z.liveDirection);
+
+  return `
+    <div class="zug-card ${cls} ${expanded?'expanded':''}" id="zc-${z.id}" data-id="${z.id}">
+      <div class="zug-top" onclick="toggleExpand(${z.id})">
+        <div class="zug-deptime ${cls}">${dep}</div>
+        <div class="zug-info">
+          <div class="zug-route">${z.von} → ${z.nach}</div>
+          ${metaParts.length ? `<div class="zug-meta">${metaParts.join(' · ')}</div>` : ''}
+        </div>
+        <div class="zug-right">
+          <button class="delete-btn" onclick="deleteZug(event,${z.id})">✕</button>
+          ${hasStops ? '<span class="chevron">▾</span>' : ''}
+        </div>
+      </div>
+      ${hasStops ? `
+      <div class="zug-body">
+        <div class="prog-wrap">
+          <span class="prog-from">${z.von}</span>
+          <div class="prog-bar"><div class="prog-fill" style="width:${z.progress||0}%"></div></div>
+          <span class="prog-pct">${z.progress||0}%</span>
+          <span class="prog-to">${z.nach}</span>
+        </div>
+        <div class="stops">${stopRows}</div>
+        <div class="notif-mins-row">
+          <span>🔔 Alarm</span>
+          <input type="number" min="1" max="60" value="${z.notifMins||5}"
+            oninput="setNotifMins(${z.id},this.value)">
+          <span>Minuten vor Ankunft</span>
+        </div>
+      </div>` : ''}
+    </div>`;
+}
+
+function toggleExpand(id) { document.getElementById('zc-'+id)?.classList.toggle('expanded'); }
+
+// ── CRUD ──────────────────────────────────────────────────────────────────────
+function deleteZug(e, id) {
+  e.stopPropagation();
+  if (!confirm('Zug löschen?')) return;
+  data[activeDay] = (data[activeDay]||[]).filter(z => z.id !== id);
+  save(); renderTabs(); renderDay();
+  toast('Zug gelöscht');
+}
+
+function openModal() {
+  ['m-von','m-nach','m-stops'].forEach(id => document.getElementById(id).value = '');
+  ['m-von-id','m-nach-id'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('m-dep').value = '';
+  document.getElementById('m-arr').value = '';
+  document.getElementById('modal').classList.add('open');
+}
+function closeModal() {
+  document.getElementById('modal').classList.remove('open');
+  document.getElementById('drop-von').classList.add('hidden');
+  document.getElementById('drop-nach').classList.add('hidden');
+}
+
+function saveZug() {
+  const von   = document.getElementById('m-von').value.trim();
+  const nach  = document.getElementById('m-nach').value.trim();
+  const vonId = document.getElementById('m-von-id').value.trim();
+  const dep   = document.getElementById('m-dep').value;
+  const arr   = document.getElementById('m-arr').value;
+  const raw   = document.getElementById('m-stops').value.trim();
+
+  if (!von || !nach || !dep) { toast('Bitte Von, Nach und Abfahrtszeit ausfüllen'); return; }
+
+  const middle = raw ? raw.split(',').map(s=>s.trim()).filter(Boolean)
+    .map(name => ({name, time:'—', status:'upcoming'})) : [];
+  const stops = [
+    {name:von,  time:dep,     status:'upcoming'},
+    ...middle,
+    {name:nach, time:arr||'—', status:'upcoming'},
+  ];
+
+  if (!data[activeDay]) data[activeDay] = [];
+  data[activeDay].push({
+    id:nextId++, von, nach, vonId, dep, arr,
+    delay:0, status:'ontime', progress:0,
+    stops, notifs:{}, notifMins:5
+  });
+  save(); renderTabs(); renderDay();
+  closeModal();
+  toast('✓ Gespeichert für ' + DAY_NAMES[activeDay]);
+}
+
+// ── Notifications ─────────────────────────────────────────────────────────────
+function toggleNotif(e, id, stopName) {
+  e.stopPropagation();
+  const z = (data[activeDay]||[]).find(z => z.id === id);
+  if (!z) return;
+  if (!z.notifs) z.notifs = {};
+  const wasExpanded = !!document.getElementById('zc-'+id)?.classList.contains('expanded');
+
+  if (z.notifs[stopName]) {
+    delete z.notifs[stopName];
+    save(); toast('Alarm für ' + stopName + ' entfernt');
+  } else {
+    if (notifPerm !== 'granted') { toast('Bitte zuerst Push erlauben — tippe auf 🔔 oben rechts'); return; }
+    z.notifs[stopName] = z.notifMins || 5;
+    save(); toast('🔔 Alarm: ' + z.notifMins + ' Min. vor ' + stopName);
+    setTimeout(() => {
+      if (notifPerm === 'granted')
+        new Notification('Train Tracker – ' + z.von + ' → ' + z.nach, {
+          body: 'Ankunft in ' + stopName + ' in ' + z.notifMins + ' Minuten' +
+                (z.delay > 0 ? ' (aktuell +' + z.delay + ' min Verspätung)' : ''),
+          tag: 'oebb-'+id+'-'+stopName,
+        });
+    }, 4000);
+  }
+  renderDay();
+  if (wasExpanded) document.getElementById('zc-'+id)?.classList.add('expanded');
+}
+
+function setNotifMins(id, val) {
+  const z = (data[activeDay]||[]).find(z => z.id === id);
+  if (z) { z.notifMins = parseInt(val)||5; save(); }
+}
+
+async function requestNotifPermission() {
+  if (!('Notification' in window)) { toast('Browser unterstützt keine Push-Benachrichtigungen'); return; }
+  const res = await Notification.requestPermission();
+  notifPerm = res;
+  updateNotifBtn();
+  if (res === 'granted') {
+    toast('✓ Push-Benachrichtigungen aktiviert!');
+    document.getElementById('perm-banner').classList.add('hidden');
+    setTimeout(() => new Notification('Train Tracker bereit', {
+      body: 'Du bekommst jetzt Alarm bevor dein Zug einfährt.'
+    }), 500);
+  } else if (res === 'denied') {
+    toast('Blockiert — in Browser-Einstellungen erlauben');
+  }
+}
+
+function updateNotifBtn() {
+  const icon = document.getElementById('notif-icon');
+  const lbl  = document.getElementById('notif-label');
+  const ban  = document.getElementById('perm-banner');
+  if (notifPerm === 'granted')     { icon.textContent='🔔'; lbl.textContent='AN';        ban.classList.add('hidden'); }
+  else if (notifPerm === 'denied') { icon.textContent='🔕'; lbl.textContent='BLOCKIERT'; ban.classList.add('hidden'); }
+  else                             { icon.textContent='🔔'; lbl.textContent='ERLAUBEN';  ban.classList.remove('hidden'); }
+}
+
+// ── Helpers ───────────────────────────────────────────────────────────────────
+function addMins(t, m) {
+  if (!t || !t.includes(':')) return t;
+  const [h, mm] = t.split(':').map(Number);
+  const tot = h*60 + mm + m;
+  return String(Math.floor(tot/60)).padStart(2,'0')+':'+String(tot%60).padStart(2,'0');
+}
+function fmtTime(date) {
+  return String(date.getHours()).padStart(2,'0')+':'+String(date.getMinutes()).padStart(2,'0');
+}
+function esc(s) { return (s||'').replace(/\\/g,'\\\\').replace(/'/g,"\\'"); }
+function toast(msg) {
+  const c = document.getElementById('toasts');
+  const t = document.createElement('div');
+  t.className='toast'; t.textContent=msg; c.appendChild(t);
+  setTimeout(()=>t.remove(), 3500);
+}
+
+// Clock
+setInterval(()=>{
+  document.getElementById('clock').textContent =
+    new Date().toLocaleTimeString('de-AT',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
+}, 1000);
+document.getElementById('clock').textContent =
+  new Date().toLocaleTimeString('de-AT',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
+
+// Auto-refresh live every 60 seconds when on today's tab
+setInterval(()=>{ if (activeDay === TODAY) refreshLive(); }, 60000);
+
+// ── Init ──────────────────────────────────────────────────────────────────────
+initApiBanner();
+updateNotifBtn();
+renderTabs();
+renderDay();
+setTimeout(()=>{
+  (data[activeDay]||[]).forEach(z =>
+    document.getElementById('zc-'+z.id)?.classList.add('expanded')
+  );
+  if (activeDay === TODAY) refreshLive();
+}, 150);
+</script>
+</body>
+</html>
