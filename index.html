@@ -2,400 +2,365 @@
 <html lang="de">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#0a1628">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#0f2040">
   <title>Train Tracker</title>
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
 
-   
     :root {
-      /* Blues */
-      --navy:  #0a1628;
-      --navy2: #0f2040;
-      --blue:  #1a3a6b;
-      --blue2: #1e4d8c;
-      --accent:#3b82f6;
-      --accent-l:#60a5fa;
-      --accent-d:#1d4ed8;
-      /* Semantic */
+      --navy: #0f2040;
+      --blue: #1a3a6b;
+      --accent: #3b82f6;
+      --accent-d: #1d4ed8;
+      --accent-l: #93c5fd;
       --green: #10b981;
       --amber: #f59e0b;
-      --red:   #ef4444;
-      /* Surface */
-      --bg:    #f8faff;
-      --bg2:   #eef2fb;
-      --bg3:   #e4eaf7;
-      --card:  #ffffff;
-      /* Text */
-      --txt:   #0f172a;
-      --txt2:  #475569;
-      --txt3:  #94a3b8;
-      /* Border */
-      --brd:   rgba(59,130,246,.12);
-      --brd2:  rgba(59,130,246,.25);
-      --brd3:  rgba(59,130,246,.45);
-      /* Fonts */
-      --fn: 'Plus Jakarta Sans', system-ui, sans-serif;
+      --red: #ef4444;
+      --bg: #f0f4ff;
+      --bg2: #e2eaf8;
+      --card: #ffffff;
+      --txt: #0f172a;
+      --txt2: #475569;
+      --txt3: #94a3b8;
+      --brd: rgba(59,130,246,.15);
+      --brd2: rgba(59,130,246,.3);
+      --fn: 'Plus Jakarta Sans', sans-serif;
       --fm: 'JetBrains Mono', monospace;
-      --r: 14px; --rs: 10px;
     }
 
-    @media (prefers-color-scheme: dark) {
-      :root {
-        --bg:   #070d1a; --bg2: #0d1a2e; --bg3: #0a1628;
-        --card: #0f2040;
-        --txt:  #e2e8f0; --txt2: #7ea3cc; --txt3: #3d6494;
-        --brd:  rgba(59,130,246,.15); --brd2: rgba(59,130,246,.3); --brd3: rgba(59,130,246,.5);
-      }
-    }
+    html, body { min-height: 100%; background: var(--bg); font-family: var(--fn); color: var(--txt); }
+    .app { max-width: 480px; margin: 0 auto; min-height: 100vh; background: var(--card); }
 
-    html, body { min-height: 100%; background: var(--bg3); font-family: var(--fn); color: var(--txt); }
-    .app { max-width: 480px; margin: 0 auto; min-height: 100vh; background: var(--bg); }
-
-    /* ── Header ── */
+    /* ── HEADER ── */
     .hdr {
-      background: linear-gradient(135deg, var(--navy) 0%, var(--navy2) 100%);
-      padding: 1.1rem 1.25rem 1rem;
-      display: flex; align-items: center; gap: 12px;
+      background: var(--navy);
+      padding: 14px 16px 12px;
+      display: flex; align-items: center; gap: 10px;
       position: sticky; top: 0; z-index: 50;
-      border-bottom: 1px solid rgba(59,130,246,.2);
     }
-    .logo-mark {
-      width: 34px; height: 34px; border-radius: 9px;
-      background: linear-gradient(135deg, var(--accent) 0%, var(--accent-d) 100%);
-      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    .logo-wrap { display: flex; align-items: center; gap: 10px; }
+    .logo-icon {
+      width: 32px; height: 32px; border-radius: 8px;
+      background: var(--accent); display: flex; align-items: center; justify-content: center;
     }
-    .logo-mark svg { width: 18px; height: 18px; }
-    .logo { color: #fff; }
-    .logo-main { font-size: 16px; font-weight: 700; letter-spacing: -.3px; }
-    .logo-sub  { font-size: 10px; opacity: .5; letter-spacing: .8px; text-transform: uppercase; font-family: var(--fm); margin-top: 1px; }
+    .logo-icon svg { width: 17px; height: 17px; }
+    .logo-text { color: #fff; }
+    .logo-main { font-size: 15px; font-weight: 700; }
+    .logo-sub  { font-size: 10px; opacity: .45; letter-spacing: .8px; font-family: var(--fm); }
     .hdr-right { margin-left: auto; display: flex; align-items: center; gap: 8px; }
-    .clock { font-family: var(--fm); font-size: 12px; color: rgba(255,255,255,.45); letter-spacing: 1px; }
+    .clock { font-family: var(--fm); font-size: 11px; color: rgba(255,255,255,.35); letter-spacing: 1px; }
     .notif-btn {
       display: flex; align-items: center; gap: 5px;
-      background: rgba(59,130,246,.15); border: 1px solid rgba(59,130,246,.3);
+      background: rgba(59,130,246,.2); border: 1px solid rgba(59,130,246,.35);
       border-radius: 20px; padding: 5px 10px; cursor: pointer;
-      color: var(--accent-l); font-family: var(--fm); font-size: 10px; letter-spacing: .5px;
-      transition: all .15s;
+      color: var(--accent-l); font-family: var(--fm); font-size: 10px;
+      -webkit-appearance: none; appearance: none;
     }
-    .notif-btn:hover { background: rgba(59,130,246,.25); }
 
-    /* ── API Banner ── */
+    /* ── API BANNER ── */
     .api-banner {
-      margin: 1rem 1.25rem 0;
-      background: rgba(59,130,246,.06); border: 1px solid var(--brd2);
-      border-radius: var(--rs); padding: 12px 14px;
+      margin: 12px 14px 0;
+      background: rgba(59,130,246,.07); border: 1px solid var(--brd2);
+      border-radius: 10px; padding: 12px;
     }
     .api-banner.hidden { display: none; }
-    .api-banner-title { font-size: 12px; font-weight: 600; color: var(--accent); margin-bottom: 8px; }
+    .api-title { font-size: 12px; font-weight: 600; color: var(--accent); margin-bottom: 8px; }
     .api-row { display: flex; gap: 6px; }
     .api-input {
-      flex: 1; font-family: var(--fm); font-size: 11px; padding: 6px 9px;
-      border: 1px solid var(--brd2); border-radius: var(--rs);
-      background: var(--card); color: var(--txt);
+      flex: 1; font-family: var(--fm); font-size: 11px; padding: 7px 9px;
+      border: 1px solid var(--brd2); border-radius: 8px;
+      background: #fff; color: var(--txt);
     }
     .api-save {
-      background: var(--accent); color: #fff; border: none; border-radius: var(--rs);
-      padding: 6px 12px; font-size: 11px; font-family: var(--fn); font-weight: 600; cursor: pointer;
-      transition: background .15s;
+      background: var(--accent); color: #fff; border: none; border-radius: 8px;
+      padding: 7px 14px; font-size: 12px; font-family: var(--fn); font-weight: 600;
+      cursor: pointer; -webkit-appearance: none;
     }
-    .api-save:hover { background: var(--accent-d); }
-    .api-hint { font-size: 10px; color: var(--txt3); margin-top: 6px; font-family: var(--fm); }
+    .api-hint { font-size: 10px; color: var(--txt3); margin-top: 5px; font-family: var(--fm); }
 
-    /* ── Perm banner ── */
-    .perm-banner {
-      margin: .75rem 1.25rem 0;
+    /* ── PUSH BANNER ── */
+    .push-banner {
+      margin: 8px 14px 0;
       background: rgba(59,130,246,.05); border: 1px solid var(--brd);
-      border-radius: var(--rs); padding: 9px 14px;
+      border-radius: 10px; padding: 9px 12px;
       display: flex; align-items: center; gap: 10px; cursor: pointer;
     }
-    .perm-banner.hidden { display: none; }
-    .perm-text { flex: 1; font-size: 12px; color: var(--txt2); }
-    .perm-ok {
-      background: var(--accent); color: #fff; border: none; border-radius: var(--rs);
-      padding: 5px 10px; font-size: 11px; font-family: var(--fn); font-weight: 600; cursor: pointer;
+    .push-banner.hidden { display: none; }
+    .push-text { flex: 1; font-size: 12px; color: var(--txt2); }
+    .push-ok {
+      background: var(--accent); color: #fff; border: none; border-radius: 8px;
+      padding: 5px 10px; font-size: 11px; font-family: var(--fn); font-weight: 600;
+      cursor: pointer; -webkit-appearance: none;
     }
 
-    /* ── Week tabs ── */
+    /* ── WEEK TABS ── */
+    .week-tabs-wrap {
+      background: var(--card);
+      border-bottom: 2px solid var(--bg2);
+      margin-top: 12px;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    .week-tabs-wrap::-webkit-scrollbar { display: none; }
     .week-tabs {
-      display: flex; background: var(--bg2);
-      border-bottom: 1px solid var(--brd);
-      overflow-x: auto; scrollbar-width: none; margin-top: .75rem;
+      display: flex;
+      min-width: 100%;
     }
-    .week-tabs::-webkit-scrollbar { display: none; }
     .wtab {
-      flex: 1; min-width: 44px; padding: 11px 4px 10px;
+      flex: 1; min-width: 46px;
+      padding: 10px 4px 9px;
       text-align: center; cursor: pointer;
-      border-bottom: 2px solid transparent;
-      transition: all .15s; color: var(--txt3); user-select: none;
+      border-bottom: 3px solid transparent;
+      transition: border-color .15s, color .15s;
+      user-select: none; -webkit-user-select: none;
     }
-    .wtab:hover { color: var(--txt2); background: var(--bg3); }
-    .wtab.active { border-bottom-color: var(--accent); color: var(--accent); background: var(--bg); }
-    .wtab-short { font-family: var(--fm); font-size: 9px; letter-spacing: 1px; text-transform: uppercase; }
-    .wtab-name  { font-size: 12px; font-weight: 600; margin-top: 3px; }
-    .wtab.today .wtab-name { color: var(--accent); }
-    .wtab-dot { width: 4px; height: 4px; border-radius: 50%; background: var(--accent); margin: 5px auto 0; opacity: 0; }
+    .wtab-short { font-family: var(--fm); font-size: 9px; letter-spacing: .8px; color: var(--txt3); text-transform: uppercase; }
+    .wtab-name  { font-size: 13px; font-weight: 600; color: var(--txt2); margin-top: 2px; }
+    .wtab.active .wtab-short { color: var(--accent); }
+    .wtab.active .wtab-name  { color: var(--accent); }
+    .wtab.active { border-bottom-color: var(--accent); }
+    .wtab.today .wtab-name { font-weight: 700; }
+    .wtab-dot { width: 4px; height: 4px; border-radius: 50%; background: var(--accent); margin: 4px auto 0; opacity: 0; }
     .wtab-dot.has { opacity: 1; }
 
-    /* ── Body ── */
-    .body { padding: 1.25rem 1.25rem 6rem; }
+    /* ── BODY ── */
+    .body { padding: 16px 14px 100px; }
 
-    .day-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
-    .day-title  { font-size: 20px; font-weight: 700; letter-spacing: -.3px; }
-    .day-sub    { font-size: 11px; color: var(--accent); font-family: var(--fm); margin-top: 2px; letter-spacing: .5px; text-transform: uppercase; }
+    .day-row {
+      display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px;
+    }
+    .day-title { font-size: 20px; font-weight: 700; }
+    .day-badge {
+      font-family: var(--fm); font-size: 10px; letter-spacing: .5px;
+      color: var(--accent); background: rgba(59,130,246,.1);
+      border-radius: 6px; padding: 3px 8px; margin-top: 3px;
+      display: inline-block;
+    }
+    .day-badge.hidden { display: none; }
 
     .refresh-btn {
       display: flex; align-items: center; gap: 6px;
       background: rgba(59,130,246,.08); border: 1px solid var(--brd2);
-      border-radius: 20px; padding: 6px 12px; font-size: 11px;
-      font-family: var(--fm); cursor: pointer; color: var(--accent);
-      transition: all .15s; letter-spacing: .3px;
+      border-radius: 20px; padding: 7px 14px; font-size: 11px;
+      font-family: var(--fm); color: var(--accent); cursor: pointer;
+      -webkit-appearance: none; appearance: none;
     }
-    .refresh-btn:hover { background: rgba(59,130,246,.15); }
     .refresh-btn.spinning svg { animation: spin .7s linear infinite; }
     @keyframes spin { to { transform: rotate(360deg); } }
 
-    /* Live bar */
     .live-bar { display: flex; align-items: center; gap: 7px; margin-bottom: 12px; font-size: 11px; color: var(--txt3); font-family: var(--fm); }
     .live-bar.hidden { display: none; }
     .live-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); flex-shrink: 0; }
-    .live-dot.loading { background: var(--amber); animation: blink 1s ease-in-out infinite; }
-    .live-dot.error   { background: var(--red); }
+    .live-dot.spin { background: var(--amber); animation: blink 1s ease-in-out infinite; }
     @keyframes blink { 0%,100%{opacity:1}50%{opacity:.3} }
 
-    /* ── Zug card ── */
+    /* ── ZUG CARD ── */
     .zug-card {
-      background: var(--card);
-      border: 1px solid var(--brd);
-      border-radius: var(--r);
-      margin-bottom: 10px;
-      overflow: hidden;
-      transition: border-color .2s, box-shadow .2s;
+      background: var(--card); border: 1px solid var(--brd);
+      border-radius: 14px; margin-bottom: 10px; overflow: hidden;
     }
-    .zug-card:hover { border-color: var(--brd2); box-shadow: 0 2px 16px rgba(59,130,246,.08); }
-    .zug-card.delayed  { border-left: 3px solid var(--amber); }
-    .zug-card.ontime   { border-left: 3px solid var(--green); }
-    .zug-card.cancelled{ border-left: 3px solid var(--red); opacity: .6; }
+    .zug-card.delayed  { border-left: 4px solid var(--amber); }
+    .zug-card.ontime   { border-left: 4px solid var(--green); }
+    .zug-card.cancelled{ border-left: 4px solid var(--red); opacity: .6; }
 
-    .zug-top { padding: 14px 16px; display: flex; align-items: center; gap: 14px; cursor: pointer; user-select: none; }
-
-    .zug-deptime {
-      font-family: var(--fm); font-size: 24px; font-weight: 500;
-      letter-spacing: -1.5px; flex-shrink: 0; min-width: 64px; color: var(--txt);
+    .zug-top {
+      padding: 14px 14px; display: flex; align-items: center;
+      gap: 12px; cursor: pointer; user-select: none; -webkit-user-select: none;
     }
-    .zug-deptime.delayed   { color: var(--amber); }
-    .zug-deptime.ontime    { color: var(--green); }
-    .zug-deptime.cancelled { color: var(--red); text-decoration: line-through; }
+    .zug-time {
+      font-family: var(--fm); font-size: 26px; font-weight: 500;
+      letter-spacing: -1.5px; flex-shrink: 0; min-width: 68px; color: var(--txt);
+    }
+    .zug-time.delayed   { color: var(--amber); }
+    .zug-time.ontime    { color: var(--green); }
+    .zug-time.cancelled { color: var(--red); text-decoration: line-through; }
 
     .zug-info { flex: 1; min-width: 0; }
     .zug-route { font-size: 14px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .zug-meta  { font-size: 11px; color: var(--txt3); font-family: var(--fm); margin-top: 3px; }
 
-    .zug-right { display: flex; align-items: center; gap: 4px; flex-shrink: 0; }
-    .delete-btn {
-      background: none; border: none; color: var(--txt3);
-      font-size: 14px; cursor: pointer; padding: 5px 6px;
-      border-radius: 6px; transition: all .15s;
+    .zug-actions { display: flex; align-items: center; gap: 2px; flex-shrink: 0; }
+    .del-btn {
+      background: none; border: none; color: var(--txt3); font-size: 16px;
+      cursor: pointer; padding: 6px 8px; border-radius: 8px; line-height: 1;
+      -webkit-appearance: none;
     }
-    .delete-btn:hover { color: var(--red); background: rgba(239,68,68,.08); }
-    .chevron { font-size: 11px; color: var(--txt3); transition: transform .25s; padding: 4px; }
-    .zug-card.expanded .chevron { transform: rotate(180deg); }
+    .chevron { font-size: 12px; color: var(--txt3); transition: transform .25s; padding: 4px 6px; }
+    .zug-card.open .chevron { transform: rotate(180deg); }
 
-    /* Card body */
+    /* Expanded body */
     .zug-body { display: none; border-top: 1px solid var(--brd); }
-    .zug-card.expanded .zug-body { display: block; }
+    .zug-card.open .zug-body { display: block; }
 
-    /* Progress */
-    .prog-wrap { padding: 12px 16px 8px; display: flex; align-items: center; gap: 8px; }
-    .prog-from, .prog-to { font-family: var(--fm); font-size: 10px; color: var(--txt3); flex-shrink: 0; max-width: 80px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-    .prog-bar { flex: 1; height: 3px; background: var(--brd); border-radius: 2px; overflow: hidden; }
-    .prog-fill { height: 100%; background: linear-gradient(90deg, var(--accent-d), var(--accent)); border-radius: 2px; transition: width .6s; }
+    /* Progress bar */
+    .prog { padding: 12px 14px 8px; display: flex; align-items: center; gap: 8px; }
+    .prog-lbl { font-family: var(--fm); font-size: 10px; color: var(--txt3); flex-shrink: 0; max-width: 78px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .prog-bar  { flex: 1; height: 3px; background: var(--bg2); border-radius: 2px; overflow: hidden; }
+    .prog-fill { height: 100%; background: var(--accent); border-radius: 2px; }
     .prog-pct  { font-family: var(--fm); font-size: 9px; color: var(--txt3); flex-shrink: 0; }
 
     /* Stops */
-    .stops { padding: 6px 16px 12px; }
+    .stops { padding: 4px 14px 12px; }
     .stop-row { display: flex; align-items: center; gap: 10px; padding: 5px 0; position: relative; }
-    .stop-line-v { position: absolute; left: 9px; top: 0; bottom: 0; width: 1.5px; background: var(--brd); z-index: 0; }
+    .stop-line-v { position: absolute; left: 9px; top: 0; bottom: 0; width: 2px; background: var(--bg2); z-index: 0; }
     .stop-line-v.passed { background: var(--accent-d); }
     .stop-dot { width: 10px; height: 10px; border-radius: 50%; border: 2px solid var(--brd2); background: var(--card); flex-shrink: 0; z-index: 1; position: relative; }
-    .stop-dot.passed  { background: var(--accent-d); border-color: var(--accent-d); }
-    .stop-dot.current { background: var(--card); border: 2.5px solid var(--accent); animation: ring 1.5s ease-in-out infinite; }
+    .stop-dot.passed { background: var(--accent-d); border-color: var(--accent-d); }
+    .stop-dot.current { background: var(--card); border: 3px solid var(--accent); animation: ring 1.5s ease-in-out infinite; }
     @keyframes ring { 0%,100%{box-shadow:0 0 0 3px rgba(59,130,246,.2)}50%{box-shadow:0 0 0 7px rgba(59,130,246,0)} }
     .stop-name { font-size: 12px; flex: 1; color: var(--txt2); }
-    .stop-name.current  { font-weight: 600; color: var(--accent); }
+    .stop-name.current { font-weight: 700; color: var(--accent); }
     .stop-name.upcoming { color: var(--txt); }
-    .stop-time { font-family: var(--fm); font-size: 11px; color: var(--txt3); text-align: right; min-width: 42px; }
-    .stop-time.delayed  { color: var(--amber); }
-
-    .nb {
+    .stop-time { font-family: var(--fm); font-size: 11px; color: var(--txt3); min-width: 40px; text-align: right; }
+    .stop-time.late { color: var(--amber); }
+    .alarm-btn {
       background: none; border: 1px solid var(--brd2); border-radius: 6px;
-      padding: 2px 8px; font-size: 10px; font-family: var(--fm); cursor: pointer;
-      color: var(--txt3); transition: all .12s; white-space: nowrap;
+      padding: 3px 8px; font-size: 10px; font-family: var(--fm);
+      color: var(--txt3); cursor: pointer; white-space: nowrap;
+      -webkit-appearance: none;
     }
-    .nb:hover { border-color: var(--accent); color: var(--accent); background: rgba(59,130,246,.07); }
-    .nb.set   { background: rgba(59,130,246,.1); border-color: var(--accent); color: var(--accent); }
+    .alarm-btn.set { background: rgba(59,130,246,.1); border-color: var(--accent); color: var(--accent); }
 
-    .notif-mins-row {
-      padding: 10px 16px; border-top: 1px solid var(--brd);
+    .alarm-row {
+      padding: 10px 14px; border-top: 1px solid var(--brd);
       display: flex; align-items: center; gap: 8px;
-      background: var(--bg2); font-size: 12px; color: var(--txt2);
+      background: var(--bg); font-size: 12px; color: var(--txt2);
     }
-    .notif-mins-row input {
-      width: 52px; font-family: var(--fm); font-size: 12px; padding: 4px 7px;
-      border: 1px solid var(--brd2); border-radius: var(--rs);
-      background: var(--card); color: var(--txt);
+    .alarm-row input {
+      width: 54px; font-family: var(--fm); font-size: 12px; padding: 5px 7px;
+      border: 1px solid var(--brd2); border-radius: 8px; background: var(--card); color: var(--txt);
+      -webkit-appearance: none;
     }
 
-    /* Add card */
-    .add-card {
-      border: 1.5px dashed var(--brd2); border-radius: var(--r); padding: 18px;
-      text-align: center; cursor: pointer; color: var(--txt3); font-size: 13px;
-      transition: all .2s;
+    /* ── ADD + IO ── */
+    .add-btn {
+      width: 100%; border: 2px dashed var(--brd2); border-radius: 14px;
+      padding: 18px; text-align: center; cursor: pointer;
+      color: var(--txt3); font-size: 13px; font-family: var(--fn);
+      background: none; -webkit-appearance: none; transition: all .2s;
+      margin-bottom: 10px;
     }
-    .add-card:hover { border-color: var(--accent); color: var(--accent); background: rgba(59,130,246,.04); }
-    .add-card .plus { font-size: 24px; margin-bottom: 4px; display: block; }
+    .add-btn:active { background: rgba(59,130,246,.05); }
+    .add-plus { font-size: 22px; display: block; margin-bottom: 4px; }
 
-    /* Import / Export */
-    .io-row { display: flex; gap: 8px; margin-top: 10px; }
+    .io-row { display: flex; gap: 8px; margin-top: 0; }
     .io-btn {
-      flex: 1; display: flex; align-items: center; justify-content: center; gap: 6px;
-      background: var(--bg2); border: 1px solid var(--brd2); border-radius: var(--rs);
-      padding: 10px 8px; font-size: 12px; font-family: var(--fn); font-weight: 500;
-      color: var(--txt2); cursor: pointer; transition: all .15s;
+      flex: 1; display: flex; align-items: center; justify-content: center; gap: 7px;
+      background: var(--bg); border: 1px solid var(--brd2); border-radius: 10px;
+      padding: 11px 8px; font-size: 12px; font-family: var(--fn); font-weight: 500;
+      color: var(--txt2); cursor: pointer; -webkit-appearance: none; transition: all .15s;
     }
-    .io-btn:hover { border-color: var(--accent); color: var(--accent); background: rgba(59,130,246,.06); }
+    .io-btn:active { background: rgba(59,130,246,.08); color: var(--accent); }
 
-    /* Empty */
+    /* ── EMPTY ── */
     .empty { text-align: center; padding: 3rem 1rem; color: var(--txt3); font-size: 13px; line-height: 1.8; }
-    .empty-icon { font-size: 40px; margin-bottom: 12px; opacity: .3; display: block; }
+    .empty-icon { font-size: 38px; display: block; margin-bottom: 10px; opacity: .3; }
 
-    /* ════════════════════════════════════════════
-       MODAL — centered, not bottom sheet
-    ════════════════════════════════════════════ */
+    /* ── MODAL ── */
     .modal-bg {
       display: none; position: fixed; inset: 0;
-      background: rgba(7,13,26,.7);
-      backdrop-filter: blur(6px);
-      -webkit-backdrop-filter: blur(6px);
-      z-index: 200;
-      align-items: center; justify-content: center;
-      padding: 1.25rem;
+      background: rgba(7,13,26,.65);
+      z-index: 200; align-items: center; justify-content: center; padding: 16px;
     }
     .modal-bg.open { display: flex; }
     .modal {
-      background: var(--card);
-      border-radius: 18px;
-      padding: 1.5rem;
-      width: 100%; max-width: 400px;
+      background: var(--card); border-radius: 18px; padding: 20px;
+      width: 100%; max-width: 420px; max-height: 88vh; overflow-y: auto;
       border: 1px solid var(--brd2);
-      max-height: 88vh; overflow-y: auto;
-      animation: popIn .22s cubic-bezier(.34,1.56,.64,1);
+      animation: pop .2s cubic-bezier(.34,1.56,.64,1);
     }
-    @keyframes popIn { from{transform:scale(.92);opacity:0} to{transform:scale(1);opacity:1} }
-    .modal-title {
-      font-size: 17px; font-weight: 700; margin-bottom: 1.25rem;
-      color: var(--txt); letter-spacing: -.3px;
-    }
+    @keyframes pop { from{transform:scale(.9);opacity:0}to{transform:scale(1);opacity:1} }
+    .modal-title { font-size: 17px; font-weight: 700; margin-bottom: 16px; }
 
     .step { display: none; }
     .step.active { display: block; }
 
-    .fl { margin-bottom: 12px; }
-    .fl label {
-      font-family: var(--fm); font-size: 10px; letter-spacing: 1px;
-      color: var(--txt3); text-transform: uppercase; display: block; margin-bottom: 5px;
+    .field { margin-bottom: 12px; }
+    .field label { font-family: var(--fm); font-size: 10px; letter-spacing: 1px; color: var(--txt3); text-transform: uppercase; display: block; margin-bottom: 5px; }
+    .field input {
+      width: 100%; font-family: var(--fn); font-size: 14px; padding: 11px 12px;
+      border: 1px solid var(--brd2); border-radius: 10px;
+      background: var(--bg); color: var(--txt);
+      -webkit-appearance: none; appearance: none;
     }
-    .fl input {
-      width: 100%; font-family: var(--fn); font-size: 14px; padding: 10px 12px;
-      border: 1px solid var(--brd2); border-radius: var(--rs);
-      background: var(--bg2); color: var(--txt);
-      transition: border-color .15s;
-    }
-    .fl input:focus { outline: none; border-color: var(--accent); background: var(--card); }
+    .field input:focus { outline: none; border-color: var(--accent); background: var(--card); }
 
-    /* Station dropdown */
-    .station-wrap { position: relative; }
-    .station-dropdown {
+    /* dropdown */
+    .field-wrap { position: relative; }
+    .dropdown {
       position: absolute; top: calc(100% + 4px); left: 0; right: 0;
-      background: var(--card);
-      border: 1px solid var(--brd2);
-      border-radius: var(--rs); z-index: 10;
-      max-height: 200px; overflow-y: auto;
-      box-shadow: 0 8px 32px rgba(7,13,26,.18);
+      background: var(--card); border: 1px solid var(--brd2); border-radius: 10px;
+      z-index: 20; max-height: 200px; overflow-y: auto;
+      box-shadow: 0 8px 30px rgba(0,0,0,.15);
     }
-    .station-dropdown.hidden { display: none; }
-    .station-option {
-      padding: 11px 14px; font-size: 13px; cursor: pointer;
-      border-bottom: 1px solid var(--brd); transition: background .1s;
-      display: flex; align-items: center; gap: 8px;
+    .dropdown.hidden { display: none; }
+    .drop-item {
+      padding: 12px 14px; font-size: 13px; cursor: pointer;
+      border-bottom: 1px solid var(--brd); display: flex; align-items: center; gap: 8px;
     }
-    .station-option:last-child { border-bottom: none; }
-    .station-option:hover { background: var(--bg2); }
-    .station-option::before {
-      content: ''; width: 6px; height: 6px; border-radius: 50%;
-      background: var(--accent); flex-shrink: 0; opacity: .5;
-    }
+    .drop-item:last-child { border-bottom: none; }
+    .drop-item:active { background: var(--bg2); }
+    .drop-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); flex-shrink: 0; opacity: .5; }
 
-    /* Connection list */
-    .conn-header { font-family: var(--fm); font-size: 10px; letter-spacing: 1px; color: var(--txt3); text-transform: uppercase; margin-bottom: 10px; }
+    /* conn items */
+    .conn-wrap { margin-bottom: 4px; }
+    .conn-lbl { font-family: var(--fm); font-size: 10px; letter-spacing: 1px; color: var(--txt3); text-transform: uppercase; margin-bottom: 8px; }
     .conn-item {
-      background: var(--bg2); border: 1px solid var(--brd);
-      border-radius: var(--rs); padding: 12px 14px; margin-bottom: 8px;
-      cursor: pointer; transition: all .15s;
-      display: flex; align-items: center; gap: 12px;
+      background: var(--bg); border: 1px solid var(--brd);
+      border-radius: 10px; padding: 12px 14px; margin-bottom: 8px;
+      cursor: pointer; display: flex; align-items: center; gap: 12px;
+      -webkit-tap-highlight-color: transparent;
     }
-    .conn-item:hover { border-color: var(--accent); background: rgba(59,130,246,.05); }
-    .conn-item.selected { border-color: var(--accent); border-width: 2px; background: rgba(59,130,246,.08); }
-    .conn-item.cancelled { opacity: .45; pointer-events: none; }
-    .conn-dep { font-family: var(--fm); font-size: 20px; font-weight: 500; letter-spacing: -1px; flex-shrink: 0; min-width: 54px; }
-    .conn-dep.delayed { color: var(--amber); }
-    .conn-info { flex: 1; min-width: 0; }
+    .conn-item:active { background: rgba(59,130,246,.07); }
+    .conn-item.sel { border: 2px solid var(--accent); background: rgba(59,130,246,.07); }
+    .conn-item.gone { opacity: .4; pointer-events: none; }
+    .conn-dep { font-family: var(--fm); font-size: 20px; font-weight: 500; letter-spacing: -1px; flex-shrink: 0; min-width: 52px; }
+    .conn-dep.late { color: var(--amber); }
+    .conn-mid { flex: 1; min-width: 0; }
     .conn-line   { font-size: 13px; font-weight: 600; }
     .conn-detail { font-family: var(--fm); font-size: 10px; color: var(--txt3); margin-top: 2px; }
-    .conn-arr { text-align: right; flex-shrink: 0; }
-    .conn-arr-time { font-family: var(--fm); font-size: 12px; color: var(--txt2); }
-    .conn-delay { font-family: var(--fm); font-size: 10px; color: var(--amber); margin-top: 2px; }
-    .conn-cancelled-badge { font-family: var(--fm); font-size: 10px; color: var(--red); padding: 1px 6px; border-radius: 4px; background: rgba(239,68,68,.1); }
+    .conn-right { text-align: right; flex-shrink: 0; }
+    .conn-arr { font-family: var(--fm); font-size: 12px; color: var(--txt2); }
+    .conn-late { font-family: var(--fm); font-size: 10px; color: var(--amber); margin-top: 2px; }
+    .conn-gone-badge { font-family: var(--fm); font-size: 10px; color: var(--red); }
 
-    .loading-state { text-align: center; padding: 2rem; color: var(--txt2); font-size: 13px; }
-    .loading-spinner { width: 26px; height: 26px; border: 2px solid var(--brd2); border-top-color: var(--accent); border-radius: 50%; animation: spin .7s linear infinite; margin: 0 auto 12px; }
-
-    /* Days grid */
-    .days-grid { display: flex; gap: 6px; flex-wrap: wrap; }
+    /* days */
+    .days-row { display: flex; gap: 6px; flex-wrap: wrap; }
     .day-cb  { display: none; }
     .day-lbl {
-      font-family: var(--fm); font-size: 11px; padding: 5px 10px;
-      border-radius: 7px; border: 1px solid var(--brd2);
-      cursor: pointer; color: var(--txt2); transition: all .12s; user-select: none;
-      background: var(--bg2);
+      font-family: var(--fm); font-size: 11px; padding: 6px 11px;
+      border-radius: 8px; border: 1px solid var(--brd2);
+      cursor: pointer; color: var(--txt2); user-select: none;
+      background: var(--bg); -webkit-user-select: none;
     }
-    .day-cb:checked + .day-lbl { background: rgba(59,130,246,.15); border-color: var(--accent); color: var(--accent); font-weight: 600; }
+    .day-cb:checked + .day-lbl { background: rgba(59,130,246,.12); border-color: var(--accent); color: var(--accent); font-weight: 600; }
 
-    /* Modal buttons */
-    .modal-acts { display: flex; gap: 8px; margin-top: 1.25rem; }
-    .modal-acts button {
-      flex: 1; padding: 11px; border-radius: var(--rs);
-      font-family: var(--fn); font-size: 13px; font-weight: 600; cursor: pointer;
-      transition: all .15s;
+    /* loading */
+    .loading { text-align: center; padding: 2rem; color: var(--txt2); font-size: 13px; }
+    .spinner { width: 26px; height: 26px; border: 2px solid var(--brd2); border-top-color: var(--accent); border-radius: 50%; animation: spin .7s linear infinite; margin: 0 auto 10px; }
+
+    /* modal buttons */
+    .m-acts { display: flex; gap: 8px; margin-top: 16px; }
+    .m-acts button {
+      flex: 1; padding: 12px; border-radius: 10px;
+      font-family: var(--fn); font-size: 13px; font-weight: 600;
+      cursor: pointer; -webkit-appearance: none; border: none;
     }
-    .btn-c    { background: var(--bg2); border: 1px solid var(--brd2); color: var(--txt2); }
-    .btn-c:hover { border-color: var(--brd3); }
-    .btn-s    { background: var(--accent); border: none; color: #fff; }
-    .btn-s:hover { background: var(--accent-d); }
-    .btn-s:disabled { background: var(--brd2); cursor: not-allowed; color: var(--txt3); }
-    .btn-back { background: var(--bg2); border: 1px solid var(--brd2); color: var(--txt2); }
+    .m-cancel { background: var(--bg2); color: var(--txt2); border: 1px solid var(--brd2) !important; }
+    .m-back   { background: var(--bg2); color: var(--txt2); border: 1px solid var(--brd2) !important; }
+    .m-go     { background: var(--accent); color: #fff; }
+    .m-go:disabled { background: var(--bg2); color: var(--txt3); }
 
-    /* Toast */
+    /* ── TOAST ── */
     .toasts { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); z-index: 300; display: flex; flex-direction: column; gap: 6px; align-items: center; pointer-events: none; }
     .toast {
       background: var(--navy); border: 1px solid rgba(59,130,246,.3);
       border-radius: 10px; padding: 10px 18px; font-size: 13px; color: #e2e8f0;
-      white-space: nowrap; animation: sup .22s ease; pointer-events: all;
-      box-shadow: 0 4px 24px rgba(0,0,0,.3);
+      white-space: nowrap; animation: sup .2s ease; pointer-events: all;
     }
-    @keyframes sup { from{transform:translateY(16px);opacity:0} to{transform:translateY(0);opacity:1} }
+    @keyframes sup { from{transform:translateY(12px);opacity:0}to{transform:translateY(0);opacity:1} }
   </style>
 </head>
 <body>
@@ -403,53 +368,57 @@
 
   <!-- Header -->
   <div class="hdr">
-    <div class="logo-mark">
-      <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <rect x="2" y="7" width="20" height="13" rx="2"/>
-        <path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/>
-        <line x1="12" y1="12" x2="12" y2="16"/>
-        <line x1="8" y1="12" x2="8.01" y2="12"/>
-        <line x1="16" y1="12" x2="16.01" y2="12"/>
-      </svg>
-    </div>
-    <div class="logo">
-      <div class="logo-main">Train Tracker</div>
-      <div class="logo-sub">Meine Züge</div>
+    <div class="logo-wrap">
+      <div class="logo-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="8" width="18" height="12" rx="2"/>
+          <path d="M7 8V6a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v2"/>
+          <circle cx="8.5" cy="14" r="1" fill="#fff" stroke="none"/>
+          <circle cx="15.5" cy="14" r="1" fill="#fff" stroke="none"/>
+          <path d="M12 14v2"/>
+        </svg>
+      </div>
+      <div class="logo-text">
+        <div class="logo-main">Train Tracker</div>
+        <div class="logo-sub">MEINE ZÜGE</div>
+      </div>
     </div>
     <div class="hdr-right">
       <span class="clock" id="clock"></span>
-      <button class="notif-btn" id="notif-btn" onclick="requestNotifPermission()">
+      <button class="notif-btn" id="notif-btn" onclick="askNotif()">
         <span id="notif-icon">🔔</span>
-        <span id="notif-label">PUSH</span>
+        <span id="notif-lbl">PUSH</span>
       </button>
     </div>
   </div>
 
   <!-- API Banner -->
   <div class="api-banner" id="api-banner">
-    <div class="api-banner-title">API-Server verbinden</div>
+    <div class="api-title">🔗 API-Server verbinden</div>
     <div class="api-row">
-      <input class="api-input" type="text" id="api-url-input" placeholder="https://train-tracker-api.onrender.com">
-      <button class="api-save" onclick="saveApiUrl()">Speichern</button>
+      <input class="api-input" id="api-input" type="text" placeholder="https://train-tracker-api-xxx.onrender.com">
+      <button class="api-save" onclick="saveApi()">OK</button>
     </div>
     <div class="api-hint">Render.com URL → echte ÖBB Live-Daten</div>
   </div>
 
-  <!-- Perm Banner -->
-  <div class="perm-banner hidden" id="perm-banner" onclick="requestNotifPermission()">
-    <div class="perm-text">🔔 Push-Benachrichtigungen aktivieren</div>
-    <button class="perm-ok">Erlauben</button>
+  <!-- Push Banner -->
+  <div class="push-banner hidden" id="push-banner">
+    <div class="push-text">🔔 Push-Benachrichtigungen aktivieren</div>
+    <button class="push-ok" onclick="askNotif()">Erlauben</button>
   </div>
 
   <!-- Week tabs -->
-  <div class="week-tabs" id="week-tabs"></div>
+  <div class="week-tabs-wrap">
+    <div class="week-tabs" id="week-tabs"></div>
+  </div>
 
   <!-- Body -->
   <div class="body">
-    <div class="day-header">
+    <div class="day-row">
       <div>
         <div class="day-title" id="day-title"></div>
-        <div class="day-sub"   id="day-sub"></div>
+        <span class="day-badge hidden" id="day-badge"></span>
       </div>
       <button class="refresh-btn" id="refresh-btn" onclick="refreshLive()">
         <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
@@ -458,71 +427,74 @@
         Live
       </button>
     </div>
+
     <div class="live-bar hidden" id="live-bar">
       <div class="live-dot" id="live-dot"></div>
-      <span id="live-label"></span>
-    </div>
-    <div id="zug-list"></div>
-    <div class="add-card" onclick="openModal()">
-      <span class="plus">＋</span>
-      Zug hinzufügen
+      <span id="live-lbl2"></span>
     </div>
 
+    <div id="zug-list"></div>
+
+    <button class="add-btn" onclick="openModal()">
+      <span class="add-plus">＋</span>
+      Zug hinzufügen
+    </button>
+
     <div class="io-row">
-      <button class="io-btn" onclick="exportPlan()">
+      <button class="io-btn" onclick="doExport()">
         <svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
           <path d="M6.5 1v8M3 6l3.5 3.5L10 6"/><path d="M1 11h11"/>
         </svg>
         Exportieren
       </button>
-      <button class="io-btn" onclick="document.getElementById('import-file').click()">
+      <button class="io-btn" onclick="document.getElementById('file-in').click()">
         <svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
           <path d="M6.5 9V1M3 4l3.5-3.5L10 4"/><path d="M1 11h11"/>
         </svg>
         Importieren
       </button>
-      <input type="file" id="import-file" accept=".json" style="display:none" onchange="importPlan(this)">
+      <input type="file" id="file-in" accept=".json" style="display:none" onchange="doImport(this)">
     </div>
   </div>
 </div>
 
 <!-- Modal -->
-<div class="modal-bg" id="modal">
+<div class="modal-bg" id="modal" onclick="bgClose(event)">
   <div class="modal">
     <div class="modal-title" id="modal-title">Zug suchen</div>
 
-    <!-- Step 1 -->
-    <div class="step active" id="step1">
-      <div class="fl">
+    <!-- Step 1: Von / Nach -->
+    <div class="step active" id="s1">
+      <div class="field">
         <label>Von</label>
-        <div class="station-wrap">
-          <input type="text" id="m-von" placeholder="Bahnhof suchen…" autocomplete="off"
-            oninput="searchStation('von', this.value)" onfocus="showKnown('von')">
-          <div class="station-dropdown hidden" id="drop-von"></div>
+        <div class="field-wrap">
+          <input type="text" id="f-von" placeholder="Bahnhof suchen…" autocomplete="off"
+            oninput="stSearch('von',this.value)" onfocus="stFocus('von')">
+          <div class="dropdown hidden" id="dd-von"></div>
         </div>
-        <input type="hidden" id="m-von-id">
+        <input type="hidden" id="f-von-id">
       </div>
-      <div class="fl">
+      <div class="field">
         <label>Nach</label>
-        <div class="station-wrap">
-          <input type="text" id="m-nach" placeholder="Bahnhof suchen…" autocomplete="off"
-            oninput="searchStation('nach', this.value)" onfocus="showKnown('nach')">
-          <div class="station-dropdown hidden" id="drop-nach"></div>
+        <div class="field-wrap">
+          <input type="text" id="f-nach" placeholder="Bahnhof suchen…" autocomplete="off"
+            oninput="stSearch('nach',this.value)" onfocus="stFocus('nach')">
+          <div class="dropdown hidden" id="dd-nach"></div>
         </div>
-        <input type="hidden" id="m-nach-id">
+        <input type="hidden" id="f-nach-id">
       </div>
-      <div class="modal-acts">
-        <button class="btn-c" onclick="closeModal()">Abbrechen</button>
-        <button class="btn-s" onclick="searchConnections()">Züge suchen →</button>
+      <div class="m-acts">
+        <button class="m-cancel" onclick="closeModal()">Abbrechen</button>
+        <button class="m-go" onclick="findConns()">Züge suchen →</button>
       </div>
     </div>
 
-    <!-- Step 2 -->
-    <div class="step" id="step2">
-      <div id="conn-list-wrap"></div>
-      <div class="fl" style="margin-top:1rem">
+    <!-- Step 2: Zug auswählen -->
+    <div class="step" id="s2">
+      <div id="conn-wrap"></div>
+      <div class="field" style="margin-top:14px">
         <label>Wochentage</label>
-        <div class="days-grid">
+        <div class="days-row">
           <input class="day-cb" type="checkbox" id="d0"><label class="day-lbl" for="d0">Mo</label>
           <input class="day-cb" type="checkbox" id="d1"><label class="day-lbl" for="d1">Di</label>
           <input class="day-cb" type="checkbox" id="d2"><label class="day-lbl" for="d2">Mi</label>
@@ -532,9 +504,9 @@
           <input class="day-cb" type="checkbox" id="d6"><label class="day-lbl" for="d6">So</label>
         </div>
       </div>
-      <div class="modal-acts">
-        <button class="btn-back" onclick="goStep(1)">← Zurück</button>
-        <button class="btn-s" id="btn-save" onclick="saveSelectedZug()" disabled>Speichern</button>
+      <div class="m-acts">
+        <button class="m-back" onclick="goStep(1)">← Zurück</button>
+        <button class="m-go" id="btn-save" onclick="saveConn()" disabled>Speichern</button>
       </div>
     </div>
   </div>
@@ -543,212 +515,207 @@
 <div class="toasts" id="toasts"></div>
 
 <script>
-const DAY_NAMES = ['Montag','Dienstag','Mittwoch','Donnerstag','Freitag','Samstag','Sonntag'];
-const DAY_SHORT = ['Mo','Di','Mi','Do','Fr','Sa','So'];
-const TODAY     = (new Date().getDay() + 6) % 7;
-const KNOWN_STATIONS = [
-  { id:'8100070', name:'Leoben Hbf' },
-  { id:'8100071', name:'St.Michael i.Oststmk' },
-  { id:'8100072', name:'Knittelfeld' },
-  { id:'8100059', name:'Bruck/Mur Hbf' },
-  { id:'8100173', name:'Graz Hbf' },
+// ── Constants ────────────────────────────────────────────────────────────────
+const DAYS  = ['Montag','Dienstag','Mittwoch','Donnerstag','Freitag','Samstag','Sonntag'];
+const SHORT = ['Mo','Di','Mi','Do','Fr','Sa','So'];
+const TODAY = (new Date().getDay() + 6) % 7;
+const KNOWN = [
+  {id:'8100070', name:'Leoben Hbf'},
+  {id:'8100071', name:'St.Michael i.Oststmk'},
+  {id:'8100072', name:'Knittelfeld'},
+  {id:'8100059', name:'Bruck/Mur Hbf'},
+  {id:'8100173', name:'Graz Hbf'},
 ];
 
-let activeDay = TODAY, nextId = 100, notifPerm = Notification.permission;
-let searchTimer = null, selectedConn = null;
+// ── State ────────────────────────────────────────────────────────────────────
+let activeDay = TODAY;
+let nextId    = 100;
+let notifPerm = Notification.permission;
+let selConn   = null;
+let stTimer   = null;
 
+// ── Data ────────────────────────────────────────────────────────────────────
 function loadData() {
   try {
-    const raw = localStorage.getItem('oebb-v4');
-    if (raw) {
-      const d = JSON.parse(raw);
-      Object.values(d).forEach(arr => arr.forEach(z => { if (z.id >= nextId) nextId = z.id + 1; }));
+    const r = localStorage.getItem('tt-v5');
+    if (r) {
+      const d = JSON.parse(r);
+      for (let i=0;i<7;i++) (d[i]||[]).forEach(z=>{ if(z.id>=nextId) nextId=z.id+1; });
       return d;
     }
-  } catch(e) {}
+  } catch(e){}
   return {0:[],1:[],2:[],3:[],4:[],5:[],6:[]};
 }
-const data = loadData();
-function save() { try { localStorage.setItem('oebb-v4', JSON.stringify(data)); } catch(e) {} }
+const D = loadData();
+function save(){ try{ localStorage.setItem('tt-v5', JSON.stringify(D)); }catch(e){} }
 
-function getApiUrl() { return localStorage.getItem('oebb-api-url') || ''; }
-function saveApiUrl() {
-  const val = document.getElementById('api-url-input').value.trim().replace(/\/$/,'');
-  if (!val) { toast('Bitte URL eingeben'); return; }
-  localStorage.setItem('oebb-api-url', val);
+// ── API ──────────────────────────────────────────────────────────────────────
+function getApi(){ return localStorage.getItem('tt-api')||''; }
+function saveApi(){
+  const v = document.getElementById('api-input').value.trim().replace(/\/$/,'');
+  if(!v){ toast('Bitte URL eingeben'); return; }
+  localStorage.setItem('tt-api', v);
   document.getElementById('api-banner').classList.add('hidden');
   toast('✓ API-URL gespeichert');
   refreshLive();
 }
-function initApiBanner() {
-  const url = getApiUrl();
-  if (url) { document.getElementById('api-banner').classList.add('hidden'); document.getElementById('api-url-input').value = url; }
+function initApi(){
+  const u=getApi();
+  if(u){ document.getElementById('api-banner').classList.add('hidden'); document.getElementById('api-input').value=u; }
 }
-async function apiFetch(path) {
-  const base = getApiUrl(); if (!base) return null;
-  try { const r = await fetch(base + path); if (!r.ok) return null; return await r.json(); } catch(e) { return null; }
+async function api(path){
+  const base=getApi(); if(!base) return null;
+  try{ const r=await fetch(base+path); if(!r.ok) return null; return await r.json(); }catch(e){ return null; }
 }
 
-// ── Station search ────────────────────────────────────────────────────────────
-function showKnown(field) {
-  const drop = document.getElementById('drop-' + field);
-  if (document.getElementById('m-' + field).value.length > 1) return;
-  drop.innerHTML = KNOWN_STATIONS.map(s =>
-    `<div class="station-option" onmousedown="selectStation('${field}','${esc(s.name)}','${s.id}')">${s.name}</div>`
-  ).join('');
-  drop.classList.remove('hidden');
+// ── Station search ───────────────────────────────────────────────────────────
+function stFocus(f){
+  if(document.getElementById('f-'+f).value.length<2) showKnown(f);
 }
-function searchStation(field, query) {
-  clearTimeout(searchTimer);
-  const drop = document.getElementById('drop-' + field);
-  if (!query || query.length < 2) { showKnown(field); return; }
-  searchTimer = setTimeout(async () => {
-    const results = await apiFetch('/stations?query=' + encodeURIComponent(query));
-    const list = results && results.length ? results : KNOWN_STATIONS.filter(s => s.name.toLowerCase().includes(query.toLowerCase()));
-    if (!list.length) { drop.classList.add('hidden'); return; }
-    drop.innerHTML = list.map(s =>
-      `<div class="station-option" onmousedown="selectStation('${field}','${esc(s.name)}','${s.id}')">${s.name}</div>`
-    ).join('');
-    drop.classList.remove('hidden');
-  }, 250);
+function showKnown(f){
+  const dd=document.getElementById('dd-'+f);
+  dd.innerHTML=KNOWN.map(s=>`<div class="drop-item" ontouchstart="" onclick="pickSt('${f}','${esc(s.name)}','${s.id}')"><div class="drop-dot"></div>${s.name}</div>`).join('');
+  dd.classList.remove('hidden');
 }
-// onmousedown instead of onclick → fires before blur, so dropdown closes cleanly
-function selectStation(field, name, id) {
-  document.getElementById('m-' + field).value = name;
-  document.getElementById('m-' + field + '-id').value = id;
-  document.getElementById('drop-' + field).classList.add('hidden');
+function stSearch(f,q){
+  clearTimeout(stTimer);
+  const dd=document.getElementById('dd-'+f);
+  if(!q||q.length<2){ if(q.length===0) dd.classList.add('hidden'); else showKnown(f); return; }
+  stTimer=setTimeout(async()=>{
+    const res=await api('/stations?query='+encodeURIComponent(q));
+    const list=res&&res.length?res:KNOWN.filter(s=>s.name.toLowerCase().includes(q.toLowerCase()));
+    if(!list.length){ dd.classList.add('hidden'); return; }
+    dd.innerHTML=list.map(s=>`<div class="drop-item" ontouchstart="" onclick="pickSt('${f}','${esc(s.name)}','${s.id}')"><div class="drop-dot"></div>${s.name}</div>`).join('');
+    dd.classList.remove('hidden');
+  },300);
 }
-// Close dropdown on input blur
-['von','nach'].forEach(field => {
-  document.getElementById('m-' + field).addEventListener('blur', () => {
-    setTimeout(() => document.getElementById('drop-' + field).classList.add('hidden'), 150);
+function pickSt(f,name,id){
+  document.getElementById('f-'+f).value=name;
+  document.getElementById('f-'+f+'-id').value=id;
+  document.getElementById('dd-'+f).classList.add('hidden');
+}
+// Close dropdowns on blur
+['von','nach'].forEach(f=>{
+  document.getElementById('f-'+f).addEventListener('blur',()=>{
+    setTimeout(()=>document.getElementById('dd-'+f).classList.add('hidden'),200);
   });
 });
 
-// ── Connections ───────────────────────────────────────────────────────────────
-async function searchConnections() {
-  const vonId  = document.getElementById('m-von-id').value;
-  const nachId = document.getElementById('m-nach-id').value;
-  const von    = document.getElementById('m-von').value.trim();
-  const nach   = document.getElementById('m-nach').value.trim();
-  if (!von || !nach) { toast('Bitte Von und Nach ausfüllen'); return; }
-  if (!getApiUrl())  { toast('Bitte zuerst API-URL eintragen'); return; }
+// ── Find connections ─────────────────────────────────────────────────────────
+async function findConns(){
+  const von  = document.getElementById('f-von').value.trim();
+  const nach = document.getElementById('f-nach').value.trim();
+  const vonId= document.getElementById('f-von-id').value;
+  const nachId=document.getElementById('f-nach-id').value;
+  if(!von||!nach){ toast('Bitte Von und Nach ausfüllen'); return; }
+  if(!getApi())  { toast('Bitte zuerst API-URL eintragen'); return; }
 
   goStep(2);
-  document.getElementById('conn-list-wrap').innerHTML =
-    `<div class="loading-state"><div class="loading-spinner"></div>Züge werden geladen…</div>`;
-  document.getElementById('btn-save').disabled = true;
-  selectedConn = null;
-  [0,1,2,3,4,5,6].forEach(i => document.getElementById('d'+i).checked = (i===activeDay));
+  document.getElementById('conn-wrap').innerHTML='<div class="loading"><div class="spinner"></div>Züge werden geladen…</div>';
+  document.getElementById('btn-save').disabled=true;
+  selConn=null;
+  for(let i=0;i<7;i++) document.getElementById('d'+i).checked=(i===activeDay);
 
-  const today = new Date().toISOString().split('T')[0];
-  const conns = await apiFetch(`/connections?fromId=${encodeURIComponent(vonId)}&toId=${encodeURIComponent(nachId)}&date=${today}`);
+  const today=new Date().toISOString().split('T')[0];
+  const conns=await api(`/connections?fromId=${encodeURIComponent(vonId)}&toId=${encodeURIComponent(nachId)}&date=${today}`);
 
-  if (!conns || !conns.length) {
-    document.getElementById('conn-list-wrap').innerHTML =
-      `<div class="loading-state">Keine Verbindungen gefunden.</div>`;
+  if(!conns||!conns.length){
+    document.getElementById('conn-wrap').innerHTML='<div class="loading">Keine Verbindungen gefunden.</div>';
     return;
   }
-  window._connData = conns;
-  window._connVon  = von;
-  window._connNach = nach;
+  window._cd=conns; window._von=von; window._nach=nach;
 
-  document.getElementById('conn-list-wrap').innerHTML =
-    `<div class="conn-header">Verbindungen heute</div>` +
-    conns.map((c,i) => {
-      const dep = c.plannedDep ? fmtTime(new Date(c.plannedDep)) : '—';
-      const arr = c.plannedArr ? fmtTime(new Date(c.plannedArr)) : '—';
-      const dm  = Math.round((c.depDelay||0)/60);
-      const realDep = dm > 0 ? addMins(dep, dm) : dep;
-      return `
-        <div class="conn-item ${c.cancelled?'cancelled':''}" id="ci-${i}" onclick="selectConn(${i})">
-          <div class="conn-dep ${dm>0?'delayed':''}">${c.cancelled?'—':realDep}</div>
-          <div class="conn-info">
-            <div class="conn-line">${c.lineName||von+' → '+nach}${c.transfers>0?' · '+c.transfers+' Umstieg':''}</div>
-            <div class="conn-detail">${c.direction||''}</div>
-          </div>
-          <div class="conn-arr">
-            <div class="conn-arr-time">${arr}</div>
-            ${dm>0?`<div class="conn-delay">+${dm} min</div>`:''}
-            ${c.cancelled?`<div class="conn-cancelled-badge">Entfällt</div>`:''}
-          </div>
-        </div>`;
+  document.getElementById('conn-wrap').innerHTML=
+    '<div class="conn-lbl">Verbindungen heute</div>'+
+    conns.map((c,i)=>{
+      const dep=c.plannedDep?fmt(new Date(c.plannedDep)):'—';
+      const arr=c.plannedArr?fmt(new Date(c.plannedArr)):'—';
+      const dm=Math.round((c.depDelay||0)/60);
+      const rd=dm>0?addM(dep,dm):dep;
+      return `<div class="conn-item ${c.cancelled?'gone':''}" id="ci${i}" onclick="pickConn(${i})">
+        <div class="conn-dep ${dm>0?'late':''}">${c.cancelled?'—':rd}</div>
+        <div class="conn-mid">
+          <div class="conn-line">${c.lineName||von+' → '+nach}${c.transfers>0?' · '+c.transfers+' Umst.':''}</div>
+          <div class="conn-detail">${c.direction||''}</div>
+        </div>
+        <div class="conn-right">
+          <div class="conn-arr">${arr}</div>
+          ${dm>0?`<div class="conn-late">+${dm} min</div>`:''}
+          ${c.cancelled?`<div class="conn-gone-badge">Entfällt</div>`:''}
+        </div>
+      </div>`;
     }).join('');
 }
 
-function selectConn(i) {
-  document.querySelectorAll('.conn-item').forEach(el => el.classList.remove('selected'));
-  document.getElementById('ci-'+i)?.classList.add('selected');
-  selectedConn = window._connData[i];
-  document.getElementById('btn-save').disabled = false;
+function pickConn(i){
+  document.querySelectorAll('.conn-item').forEach(el=>el.classList.remove('sel'));
+  document.getElementById('ci'+i)?.classList.add('sel');
+  selConn=window._cd[i];
+  document.getElementById('btn-save').disabled=false;
 }
 
-function saveSelectedZug() {
-  if (!selectedConn) { toast('Bitte einen Zug auswählen'); return; }
-  const days = [0,1,2,3,4,5,6].filter(i => document.getElementById('d'+i).checked);
-  if (!days.length) { toast('Bitte mindestens einen Tag auswählen'); return; }
+function saveConn(){
+  if(!selConn){ toast('Bitte einen Zug auswählen'); return; }
+  const days=[0,1,2,3,4,5,6].filter(i=>document.getElementById('d'+i).checked);
+  if(!days.length){ toast('Bitte mindestens einen Tag wählen'); return; }
 
-  const von = window._connVon, nach = window._connNach;
-  const dep = selectedConn.plannedDep ? fmtTime(new Date(selectedConn.plannedDep)) : '—';
-  const arr = selectedConn.plannedArr ? fmtTime(new Date(selectedConn.plannedArr)) : '—';
-  const now = new Date();
-  const stops = (selectedConn.stops||[]).map(s => {
-    const t = s.plannedDeparture||s.plannedArrival;
-    const time = t ? fmtTime(new Date(t)) : '—';
-    const st   = t ? new Date(t) : null;
-    return { name:s.name, time, status: st?(st<now?'passed':'upcoming'):'upcoming', delay: Math.round((s.departureDelay||0)/60)||0 };
+  const von=window._von, nach=window._nach;
+  const dep=selConn.plannedDep?fmt(new Date(selConn.plannedDep)):'—';
+  const arr=selConn.plannedArr?fmt(new Date(selConn.plannedArr)):'—';
+  const now=new Date();
+  const stops=(selConn.stops||[]).map(s=>{
+    const t=s.plannedDeparture||s.plannedArrival;
+    const time=t?fmt(new Date(t)):'—';
+    const st=t?new Date(t):null;
+    return{name:s.name,time,status:st?(st<now?'passed':'upcoming'):'upcoming',delay:Math.round((s.departureDelay||0)/60)||0};
   });
-  const fi = stops.findIndex(s=>s.status==='upcoming');
-  if (fi > 0) stops[fi].status = 'current';
-  const passed   = stops.filter(s=>s.status==='passed').length;
-  const progress = stops.length>1 ? Math.round((passed/(stops.length-1))*100) : 0;
+  const fi=stops.findIndex(s=>s.status==='upcoming');
+  if(fi>0) stops[fi].status='current';
+  const passed=stops.filter(s=>s.status==='passed').length;
+  const progress=stops.length>1?Math.round((passed/(stops.length-1))*100):0;
 
-  const base = { von, nach, vonId: document.getElementById('m-von-id').value, dep, arr,
-    tripId: selectedConn.tripId, lineName: selectedConn.lineName,
-    delay: Math.round((selectedConn.depDelay||0)/60),
-    status: selectedConn.cancelled?'cancelled':(selectedConn.depDelay||0)>0?'delayed':'ontime',
-    progress, stops, notifs:{}, notifMins:5 };
+  const base={von,nach,vonId:document.getElementById('f-von-id').value,dep,arr,
+    tripId:selConn.tripId,lineName:selConn.lineName,
+    delay:Math.round((selConn.depDelay||0)/60),
+    status:selConn.cancelled?'cancelled':(selConn.depDelay||0)>0?'delayed':'ontime',
+    progress,stops,notifs:{},notifMins:5};
 
-  days.forEach(d => {
-    if (!data[d]) data[d]=[];
-    data[d].push({...base, id:nextId++});
-  });
+  days.forEach(d=>{ if(!D[d]) D[d]=[]; D[d].push({...base,id:nextId++}); });
   save(); renderTabs(); renderDay();
   closeModal();
-  toast(`✓ ${base.lineName||von+' → '+nach} gespeichert`);
+  toast('✓ '+( base.lineName||von+' → '+nach)+' gespeichert');
 }
 
-// ── Live refresh ──────────────────────────────────────────────────────────────
-async function refreshLive() {
-  if (!getApiUrl()) { toast('Bitte zuerst API-URL eintragen'); return; }
-  const btn = document.getElementById('refresh-btn');
-  const dot = document.getElementById('live-dot');
-  const lbl = document.getElementById('live-label');
-  document.getElementById('live-bar').classList.remove('hidden');
+// ── Live refresh ─────────────────────────────────────────────────────────────
+async function refreshLive(){
+  if(!getApi()){ toast('Bitte zuerst API-URL eintragen'); return; }
+  const btn=document.getElementById('refresh-btn');
+  const bar=document.getElementById('live-bar');
+  const dot=document.getElementById('live-dot');
+  const lbl=document.getElementById('live-lbl2');
   btn.classList.add('spinning');
-  dot.className='live-dot loading'; lbl.textContent='Lädt…';
+  bar.classList.remove('hidden');
+  dot.className='live-dot spin'; lbl.textContent='Lädt…';
 
-  const zuege = data[activeDay]||[];
-  const sids  = [...new Set(zuege.map(z=>z.vonId).filter(Boolean))];
-  let updated = 0;
+  const zuege=D[activeDay]||[];
+  const sids=[...new Set(zuege.map(z=>z.vonId).filter(Boolean))];
+  let upd=0;
 
-  for (const sid of sids) {
-    const deps = await apiFetch(`/departures?stationId=${sid}&duration=180`);
-    if (!deps) continue;
-    deps.forEach(dep => {
-      const dt = dep.plannedWhen ? fmtTime(new Date(dep.plannedWhen)) : null;
-      if (!dt) return;
-      zuege.forEach(z => {
-        if (z.vonId===sid && z.dep===dt) {
-          z.delay    = Math.round((dep.delay||0)/60);
-          z.status   = dep.cancelled?'cancelled':z.delay>0?'delayed':'ontime';
-          z.tripId   = dep.tripId;
-          z.lineName = dep.line||z.lineName;
-          updated++;
-          if (z.delay>0 && notifPerm==='granted') {
-            const ns = (z.stops||[]).find(s=>s.status==='upcoming'||s.status==='current');
-            if (ns && z.notifs && z.notifs[ns.name])
-              new Notification(`⚠️ Verspätung – ${z.von} → ${z.nach}`,{body:`${z.delay} Min. Verspätung.`,tag:'delay-'+z.id});
+  for(const sid of sids){
+    const deps=await api('/departures?stationId='+sid+'&duration=180');
+    if(!deps) continue;
+    deps.forEach(dep=>{
+      const dt=dep.plannedWhen?fmt(new Date(dep.plannedWhen)):null;
+      if(!dt) return;
+      zuege.forEach(z=>{
+        if(z.vonId===sid&&z.dep===dt){
+          z.delay=Math.round((dep.delay||0)/60);
+          z.status=dep.cancelled?'cancelled':z.delay>0?'delayed':'ontime';
+          z.tripId=dep.tripId; z.lineName=dep.line||z.lineName; upd++;
+          if(z.delay>0&&notifPerm==='granted'){
+            const ns=(z.stops||[]).find(s=>s.status==='upcoming'||s.status==='current');
+            if(ns&&z.notifs&&z.notifs[ns.name])
+              new Notification('⚠️ Verspätung – '+z.von+' → '+z.nach,{body:z.delay+' Min. Verspätung.',tag:'d'+z.id});
           }
         }
       });
@@ -758,229 +725,225 @@ async function refreshLive() {
   save();
   btn.classList.remove('spinning');
   dot.className='live-dot';
-  lbl.textContent=`Aktualisiert ${new Date().toLocaleTimeString('de-AT',{hour:'2-digit',minute:'2-digit'})}${updated?' · '+updated+' live':''}`;
-
-  const exp=[...document.querySelectorAll('.zug-card.expanded')].map(c=>+c.dataset.id);
+  lbl.textContent='Aktualisiert '+new Date().toLocaleTimeString('de-AT',{hour:'2-digit',minute:'2-digit'})+(upd?' · '+upd+' live':'');
+  const exp=[...document.querySelectorAll('.zug-card.open')].map(c=>+c.dataset.id);
   renderDay();
-  exp.forEach(id=>document.getElementById('zc-'+id)?.classList.add('expanded'));
+  exp.forEach(id=>document.getElementById('zc'+id)?.classList.add('open'));
 }
 
-// ── Tabs & Day ────────────────────────────────────────────────────────────────
-function renderTabs() {
-  document.getElementById('week-tabs').innerHTML = DAY_SHORT.map((s,i) =>
+// ── Tabs ─────────────────────────────────────────────────────────────────────
+function renderTabs(){
+  document.getElementById('week-tabs').innerHTML=SHORT.map((s,i)=>
     `<div class="wtab ${i===activeDay?'active':''} ${i===TODAY?'today':''}" onclick="switchDay(${i})">
        <div class="wtab-short">${s}</div>
-       <div class="wtab-name">${DAY_NAMES[i].slice(0,2)}</div>
-       <div class="wtab-dot ${(data[i]||[]).length?'has':''}"></div>
+       <div class="wtab-name">${DAYS[i].slice(0,2)}</div>
+       <div class="wtab-dot ${(D[i]||[]).length?'has':''}"></div>
      </div>`).join('');
 }
-function switchDay(i) {
+function switchDay(i){
   activeDay=i; renderTabs(); renderDay();
-  if (i===TODAY) refreshLive();
-}
-function renderDay() {
-  document.getElementById('day-title').textContent = DAY_NAMES[activeDay];
-  document.getElementById('day-sub').textContent   = activeDay===TODAY?'Heute':activeDay===(TODAY+1)%7?'Morgen':'';
-  const zuege = (data[activeDay]||[]).slice().sort((a,b)=>a.dep.localeCompare(b.dep));
-  const exp   = [...document.querySelectorAll('.zug-card.expanded')].map(c=>+c.dataset.id);
-  const list  = document.getElementById('zug-list');
-  if (!zuege.length) {
-    list.innerHTML=`<div class="empty"><span class="empty-icon">🚆</span>Keine Züge für ${DAY_NAMES[activeDay]}.<br>Tippe auf ＋ um einen Zug zu suchen.</div>`;
-    return;
-  }
-  list.innerHTML=zuege.map(z=>renderZug(z,exp.includes(z.id))).join('');
+  if(i===TODAY) refreshLive();
 }
 
-function renderZug(z, expanded) {
-  const dep = z.delay>0 ? addMins(z.dep,z.delay) : z.dep;
-  const cls = z.status==='cancelled'?'cancelled':z.status==='delayed'?'delayed':'ontime';
-  const hasStops = z.stops && z.stops.length>1;
-  const stopRows = (z.stops||[]).map((s,i,arr) => {
-    const last=i===arr.length-1;
-    const can =s.status==='upcoming'||s.status==='current';
+// ── Day ──────────────────────────────────────────────────────────────────────
+function renderDay(){
+  document.getElementById('day-title').textContent=DAYS[activeDay];
+  const badge=document.getElementById('day-badge');
+  const sub=activeDay===TODAY?'Heute':activeDay===(TODAY+1)%7?'Morgen':'';
+  if(sub){ badge.textContent=sub; badge.classList.remove('hidden'); }
+  else   { badge.classList.add('hidden'); }
+
+  const zuege=(D[activeDay]||[]).slice().sort((a,b)=>a.dep.localeCompare(b.dep));
+  const exp=[...document.querySelectorAll('.zug-card.open')].map(c=>+c.dataset.id);
+  const list=document.getElementById('zug-list');
+
+  if(!zuege.length){
+    list.innerHTML='<div class="empty"><span class="empty-icon">🚆</span>Keine Züge für '+DAYS[activeDay]+'.<br>Tippe auf ＋ um einen Zug zu suchen.</div>';
+    return;
+  }
+  list.innerHTML=zuege.map(z=>buildZug(z,exp.includes(z.id))).join('');
+}
+
+function buildZug(z,open){
+  const dep=z.delay>0?addM(z.dep,z.delay):z.dep;
+  const cls=z.status==='cancelled'?'cancelled':z.status==='delayed'?'delayed':'ontime';
+  const hasS=z.stops&&z.stops.length>1;
+  const rows=(z.stops||[]).map((s,i,a)=>{
+    const last=i===a.length-1;
+    const can=s.status==='upcoming'||s.status==='current';
     const nSet=z.notifs&&z.notifs[s.name];
-    const nb  =can?`<button class="nb ${nSet?'set':''}" onclick="toggleNotif(event,${z.id},'${esc(s.name)}')">${nSet?'🔔 '+nSet+'m':'🔔'}</button>`
-                  :`<span style="width:46px;display:inline-block"></span>`;
+    const nb=can
+      ?`<button class="alarm-btn ${nSet?'set':''}" onclick="toggleAlarm(event,${z.id},'${esc(s.name)}')">${nSet?'🔔 '+nSet+'m':'🔔'}</button>`
+      :`<span style="width:48px;display:inline-block"></span>`;
     return `<div class="stop-row">
       ${!last?`<div class="stop-line-v ${s.status==='passed'?'passed':''}"></div>`:''}
       <div class="stop-dot ${s.status}"></div>
       <div class="stop-name ${s.status}">${s.name}</div>
-      <span class="stop-time ${s.delay?'delayed':''}">${s.time}${s.delay?' +'+s.delay+"'":''}
+      <span class="stop-time ${s.delay?'late':''}">${s.time}${s.delay?' +'+s.delay+"'":''}
       </span>${nb}</div>`;
   }).join('');
   const meta=[];
-  if (z.lineName) meta.push(z.lineName);
-  if (z.arr)      meta.push('an '+( z.delay>0?addMins(z.arr,z.delay):z.arr));
-  if (z.delay>0)  meta.push(`<span style="color:var(--amber)">+${z.delay} min</span>`);
-  if (z.status==='cancelled') meta.push(`<span style="color:var(--red)">Entfällt</span>`);
+  if(z.lineName) meta.push(z.lineName);
+  if(z.arr)      meta.push('an '+(z.delay>0?addM(z.arr,z.delay):z.arr));
+  if(z.delay>0)  meta.push('<span style="color:var(--amber)">+'+z.delay+' min</span>');
+  if(z.status==='cancelled') meta.push('<span style="color:var(--red)">Entfällt</span>');
 
-  return `<div class="zug-card ${cls} ${expanded?'expanded':''}" id="zc-${z.id}" data-id="${z.id}">
-    <div class="zug-top" onclick="toggleExpand(${z.id})">
-      <div class="zug-deptime ${cls}">${dep}</div>
+  return `<div class="zug-card ${cls} ${open?'open':''}" id="zc${z.id}" data-id="${z.id}">
+    <div class="zug-top" onclick="toggleCard(${z.id})">
+      <div class="zug-time ${cls}">${dep}</div>
       <div class="zug-info">
         <div class="zug-route">${z.von} → ${z.nach}</div>
         ${meta.length?`<div class="zug-meta">${meta.join(' · ')}</div>`:''}
       </div>
-      <div class="zug-right">
-        <button class="delete-btn" onclick="deleteZug(event,${z.id})">✕</button>
-        ${hasStops?'<span class="chevron">▾</span>':''}
+      <div class="zug-actions">
+        <button class="del-btn" onclick="delZug(event,${z.id})">✕</button>
+        ${hasS?'<span class="chevron">▾</span>':''}
       </div>
     </div>
-    ${hasStops?`<div class="zug-body">
-      <div class="prog-wrap">
-        <span class="prog-from">${z.von}</span>
+    ${hasS?`<div class="zug-body">
+      <div class="prog">
+        <span class="prog-lbl">${z.von}</span>
         <div class="prog-bar"><div class="prog-fill" style="width:${z.progress||0}%"></div></div>
         <span class="prog-pct">${z.progress||0}%</span>
-        <span class="prog-to">${z.nach}</span>
+        <span class="prog-lbl">${z.nach}</span>
       </div>
-      <div class="stops">${stopRows}</div>
-      <div class="notif-mins-row">
-        <span>🔔 Alarm</span>
-        <input type="number" min="1" max="60" value="${z.notifMins||5}" oninput="setNotifMins(${z.id},this.value)">
+      <div class="stops">${rows}</div>
+      <div class="alarm-row">
+        <span>🔔</span>
+        <input type="number" min="1" max="60" value="${z.notifMins||5}" oninput="setAlarmMins(${z.id},this.value)">
         <span>Min. vor Ankunft</span>
       </div>
-    </div>` : ''}
+    </div>`:''}
   </div>`;
 }
 
-function toggleExpand(id) { document.getElementById('zc-'+id)?.classList.toggle('expanded'); }
-function deleteZug(e,id) {
+function toggleCard(id){ document.getElementById('zc'+id)?.classList.toggle('open'); }
+function delZug(e,id){
   e.stopPropagation();
-  if (!confirm('Zug löschen?')) return;
-  data[activeDay]=(data[activeDay]||[]).filter(z=>z.id!==id);
+  if(!confirm('Zug löschen?')) return;
+  D[activeDay]=(D[activeDay]||[]).filter(z=>z.id!==id);
   save(); renderTabs(); renderDay(); toast('Zug gelöscht');
 }
 
-// ── Modal ─────────────────────────────────────────────────────────────────────
-function goStep(n) {
+// ── Modal ────────────────────────────────────────────────────────────────────
+function goStep(n){
   document.querySelectorAll('.step').forEach((el,i)=>el.classList.toggle('active',i===n-1));
-  document.getElementById('modal-title').textContent = n===1?'Zug suchen':'Zug auswählen';
+  document.getElementById('modal-title').textContent=n===1?'Zug suchen':'Zug auswählen';
 }
-function openModal() {
-  ['m-von','m-nach'].forEach(id=>document.getElementById(id).value='');
-  ['m-von-id','m-nach-id'].forEach(id=>document.getElementById(id).value='');
-  ['drop-von','drop-nach'].forEach(id=>document.getElementById(id).classList.add('hidden'));
+function openModal(){
+  ['f-von','f-nach'].forEach(id=>document.getElementById(id).value='');
+  ['f-von-id','f-nach-id'].forEach(id=>document.getElementById(id).value='');
+  ['dd-von','dd-nach'].forEach(id=>document.getElementById(id).classList.add('hidden'));
   goStep(1);
   document.getElementById('modal').classList.add('open');
 }
-function closeModal() {
+function closeModal(){
   document.getElementById('modal').classList.remove('open');
-  ['drop-von','drop-nach'].forEach(id=>document.getElementById(id).classList.add('hidden'));
 }
-document.getElementById('modal').addEventListener('click', e=>{ if(e.target.id==='modal') closeModal(); });
+function bgClose(e){ if(e.target.id==='modal') closeModal(); }
 
-// ── Notifications ─────────────────────────────────────────────────────────────
-function toggleNotif(e,id,stopName) {
+// ── Notifications ────────────────────────────────────────────────────────────
+function toggleAlarm(e,id,stop){
   e.stopPropagation();
-  const z=(data[activeDay]||[]).find(z=>z.id===id); if(!z) return;
+  const z=(D[activeDay]||[]).find(z=>z.id===id); if(!z) return;
   if(!z.notifs) z.notifs={};
-  const was=!!document.getElementById('zc-'+id)?.classList.contains('expanded');
-  if (z.notifs[stopName]) { delete z.notifs[stopName]; save(); toast('Alarm für '+stopName+' entfernt'); }
-  else {
-    if (notifPerm!=='granted') { toast('Bitte zuerst Push erlauben'); return; }
-    z.notifs[stopName]=z.notifMins||5; save();
-    toast('🔔 Alarm: '+z.notifMins+' Min. vor '+stopName);
+  const was=document.getElementById('zc'+id)?.classList.contains('open');
+  if(z.notifs[stop]){ delete z.notifs[stop]; save(); toast('Alarm entfernt'); }
+  else{
+    if(notifPerm!=='granted'){ toast('Bitte Push erlauben (🔔 oben)'); return; }
+    z.notifs[stop]=z.notifMins||5; save();
+    toast('🔔 Alarm: '+z.notifMins+' Min. vor '+stop);
     setTimeout(()=>{ if(notifPerm==='granted') new Notification('Train Tracker – '+z.von+' → '+z.nach,{
-      body:'Ankunft in '+stopName+' in '+z.notifMins+' Minuten'+(z.delay>0?' (+'+z.delay+' min)':''),
-      tag:'oebb-'+id+'-'+stopName});},4000);
+      body:'Ankunft in '+stop+' in '+z.notifMins+' Minuten'+(z.delay>0?' (+'+z.delay+' min)':''),
+      tag:'a'+id+stop});},4000);
   }
   renderDay();
-  if (was) document.getElementById('zc-'+id)?.classList.add('expanded');
+  if(was) document.getElementById('zc'+id)?.classList.add('open');
 }
-function setNotifMins(id,val) { const z=(data[activeDay]||[]).find(z=>z.id===id); if(z){z.notifMins=parseInt(val)||5;save();} }
-async function requestNotifPermission() {
-  if(!('Notification' in window)){toast('Browser unterstützt keine Benachrichtigungen');return;}
-  const res=await Notification.requestPermission(); notifPerm=res; updateNotifBtn();
-  if(res==='granted'){toast('✓ Benachrichtigungen aktiviert!');document.getElementById('perm-banner').classList.add('hidden');setTimeout(()=>new Notification('Train Tracker bereit',{body:'Du bekommst jetzt Alarm bevor dein Zug einfährt.'}),500);}
-  else if(res==='denied') toast('Blockiert — in Browsereinstellungen erlauben');
+function setAlarmMins(id,v){ const z=(D[activeDay]||[]).find(z=>z.id===id); if(z){z.notifMins=parseInt(v)||5;save();} }
+
+async function askNotif(){
+  if(!('Notification' in window)){ toast('Benachrichtigungen nicht unterstützt'); return; }
+  const r=await Notification.requestPermission(); notifPerm=r; updateNotifUI();
+  if(r==='granted'){
+    toast('✓ Benachrichtigungen aktiviert!');
+    document.getElementById('push-banner').classList.add('hidden');
+    setTimeout(()=>new Notification('Train Tracker bereit',{body:'Du bekommst jetzt Alarm bevor dein Zug einfährt.'}),500);
+  } else if(r==='denied') toast('Blockiert — in Browsereinstellungen erlauben');
 }
-function updateNotifBtn(){
-  const icon=document.getElementById('notif-icon'),lbl=document.getElementById('notif-label'),ban=document.getElementById('perm-banner');
-  if(notifPerm==='granted')    {icon.textContent='🔔';lbl.textContent='AN';       ban.classList.add('hidden');}
-  else if(notifPerm==='denied'){icon.textContent='🔕';lbl.textContent='BLOCKIERT';ban.classList.add('hidden');}
-  else                         {icon.textContent='🔔';lbl.textContent='ERLAUBEN'; ban.classList.remove('hidden');}
+function updateNotifUI(){
+  const icon=document.getElementById('notif-icon');
+  const lbl=document.getElementById('notif-lbl');
+  const ban=document.getElementById('push-banner');
+  if(notifPerm==='granted')    { icon.textContent='🔔'; lbl.textContent='AN';        ban.classList.add('hidden'); }
+  else if(notifPerm==='denied'){ icon.textContent='🔕'; lbl.textContent='BLOCKIERT'; ban.classList.add('hidden'); }
+  else                         { icon.textContent='🔔'; lbl.textContent='ERLAUBEN';  ban.classList.remove('hidden'); }
 }
 
-// ── Helpers ───────────────────────────────────────────────────────────────────
-function addMins(t,m){
-  if(!t||!t.includes(':'))return t;
-  const[h,mm]=t.split(':').map(Number),tot=h*60+mm+m;
-  return String(Math.floor(tot/60)).padStart(2,'0')+':'+String(tot%60).padStart(2,'0');
+// ── Export / Import ──────────────────────────────────────────────────────────
+function doExport(){
+  const blob=new Blob([JSON.stringify({version:1,exported:new Date().toISOString(),days:D},null,2)],{type:'application/json'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download='train-tracker-'+new Date().toISOString().split('T')[0]+'.json';
+  a.click(); toast('✓ Exportiert');
 }
-function fmtTime(d){return String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0');}
-function esc(s){return(s||'').replace(/\\/g,'\\\\').replace(/'/g,"\\'")}
-function toast(msg){
-  const c=document.getElementById('toasts'),t=document.createElement('div');
-  t.className='toast';t.textContent=msg;c.appendChild(t);setTimeout(()=>t.remove(),3500);
-}
-setInterval(()=>{document.getElementById('clock').textContent=new Date().toLocaleTimeString('de-AT',{hour:'2-digit',minute:'2-digit',second:'2-digit'});},1000);
-document.getElementById('clock').textContent=new Date().toLocaleTimeString('de-AT',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
-setInterval(()=>{if(activeDay===TODAY)refreshLive();},60000);
-
-// ── Export / Import ───────────────────────────────────────────────────────────
-function exportPlan() {
-  const plan = {
-    version: 1,
-    exported: new Date().toISOString(),
-    days: data
-  };
-  const blob = new Blob([JSON.stringify(plan, null, 2)], { type: 'application/json' });
-  const url  = URL.createObjectURL(blob);
-  const a    = document.createElement('a');
-  const date = new Date().toISOString().split('T')[0];
-  a.href = url; a.download = `train-tracker-${date}.json`;
-  a.click(); URL.revokeObjectURL(url);
-  toast('✓ Wochenplan exportiert');
-}
-
-function importPlan(input) {
-  const file = input.files[0]; if (!file) return;
-  const reader = new FileReader();
-  reader.onload = e => {
-    try {
-      const plan = JSON.parse(e.target.result);
-      // Support both raw data object and wrapped {version, days}
-      const incoming = plan.days || plan;
-      // Validate: must have keys 0-6
-      if (!incoming[0] && !incoming['0']) throw new Error('Ungültiges Format');
-      const normalized = {};
-      for (let i = 0; i < 7; i++) normalized[i] = incoming[i] || incoming[String(i)] || [];
-      // Merge or replace?
-      const hasExisting = Object.values(data).some(arr => arr.length > 0);
-      if (hasExisting) {
-        if (!confirm('Vorhandene Züge ersetzen oder zusammenführen?
-
-OK = Ersetzen
-Abbrechen = Zusammenführen')) {
-          // Merge: add imported trains that don't already exist (by dep+von+nach)
-          for (let i = 0; i < 7; i++) {
-            (normalized[i] || []).forEach(z => {
-              const exists = (data[i] || []).some(e => e.dep === z.dep && e.von === z.von && e.nach === z.nach);
-              if (!exists) { z.id = nextId++; if (!data[i]) data[i]=[]; data[i].push(z); }
-            });
-          }
-          save(); renderTabs(); renderDay();
-          toast('✓ Züge zusammengeführt');
-          return;
-        }
+function doImport(inp){
+  const file=inp.files[0]; if(!file) return;
+  const reader=new FileReader();
+  reader.onload=e=>{
+    try{
+      const p=JSON.parse(e.target.result);
+      const inc=p.days||p;
+      if(!inc[0]&&!inc['0']) throw new Error('Ungültig');
+      const norm={};
+      for(let i=0;i<7;i++) norm[i]=inc[i]||inc[String(i)]||[];
+      const has=Object.values(D).some(a=>a.length>0);
+      if(has&&!confirm('Ersetzen oder zusammenführen?\nOK = Ersetzen | Abbrechen = Zusammenführen')){
+        for(let i=0;i<7;i++) (norm[i]||[]).forEach(z=>{
+          const ex=(D[i]||[]).some(e=>e.dep===z.dep&&e.von===z.von&&e.nach===z.nach);
+          if(!ex){ z.id=nextId++; if(!D[i]) D[i]=[]; D[i].push(z); }
+        });
+      } else {
+        for(let i=0;i<7;i++) D[i]=(norm[i]||[]).map(z=>({...z,id:nextId++}));
       }
-      // Replace
-      for (let i = 0; i < 7; i++) {
-        data[i] = (normalized[i] || []).map(z => ({ ...z, id: nextId++ }));
-      }
-      save(); renderTabs(); renderDay();
-      toast('✓ Wochenplan importiert');
-    } catch(err) {
-      toast('Fehler: Ungültige Datei');
-      console.error(err);
-    }
-    input.value = '';
+      save(); renderTabs(); renderDay(); toast('✓ Importiert');
+    } catch(err){ toast('Fehler: Ungültige Datei'); }
+    inp.value='';
   };
   reader.readAsText(file);
 }
 
-initApiBanner();updateNotifBtn();renderTabs();renderDay();
-setTimeout(()=>{(data[activeDay]||[]).forEach(z=>document.getElementById('zc-'+z.id)?.classList.add('expanded'));if(activeDay===TODAY)refreshLive();},150);
+// ── Helpers ──────────────────────────────────────────────────────────────────
+function addM(t,m){
+  if(!t||!t.includes(':')) return t;
+  const[h,mm]=t.split(':').map(Number),tot=h*60+mm+m;
+  return String(Math.floor(tot/60)).padStart(2,'0')+':'+String(tot%60).padStart(2,'0');
+}
+function fmt(d){ return String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0'); }
+function esc(s){ return (s||'').replace(/\\/g,'\\\\').replace(/'/g,"\\'"); }
+function toast(msg){
+  const c=document.getElementById('toasts'),t=document.createElement('div');
+  t.className='toast'; t.textContent=msg; c.appendChild(t);
+  setTimeout(()=>t.remove(),3500);
+}
+
+// Clock
+setInterval(()=>{ document.getElementById('clock').textContent=new Date().toLocaleTimeString('de-AT',{hour:'2-digit',minute:'2-digit',second:'2-digit'}); },1000);
+document.getElementById('clock').textContent=new Date().toLocaleTimeString('de-AT',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
+
+// Auto-refresh every 60s on today
+setInterval(()=>{ if(activeDay===TODAY) refreshLive(); },60000);
+
+// ── Init ─────────────────────────────────────────────────────────────────────
+initApi();
+updateNotifUI();
+renderTabs();
+renderDay();
+setTimeout(()=>{
+  (D[activeDay]||[]).forEach(z=>document.getElementById('zc'+z.id)?.classList.add('open'));
+  if(activeDay===TODAY) refreshLive();
+},150);
 </script>
 </body>
 </html>
