@@ -9,7 +9,6 @@
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-
     :root {
       /* Blues */
       --navy:  #0a1628;
@@ -120,22 +119,22 @@
 
     /* ── Week tabs ── */
     .week-tabs {
-      display: flex; background: var(--navy);
+      display: flex; background: var(--bg2);
+      border-bottom: 1px solid var(--brd);
       overflow-x: auto; scrollbar-width: none; margin-top: .75rem;
     }
     .week-tabs::-webkit-scrollbar { display: none; }
     .wtab {
-      flex: 1; min-width: 44px; padding: 10px 4px 10px;
+      flex: 1; min-width: 44px; padding: 11px 4px 10px;
       text-align: center; cursor: pointer;
       border-bottom: 2px solid transparent;
-      transition: all .15s; color: rgba(255,255,255,.35); user-select: none;
+      transition: all .15s; color: var(--txt3); user-select: none;
     }
-    .wtab:hover { color: rgba(255,255,255,.65); }
-    .wtab.active { border-bottom-color: var(--accent); color: #fff; }
-    .wtab.today { }
+    .wtab:hover { color: var(--txt2); background: var(--bg3); }
+    .wtab.active { border-bottom-color: var(--accent); color: var(--accent); background: var(--bg); }
     .wtab-short { font-family: var(--fm); font-size: 9px; letter-spacing: 1px; text-transform: uppercase; }
     .wtab-name  { font-size: 12px; font-weight: 600; margin-top: 3px; }
-    .wtab.today .wtab-name { color: var(--accent-l); }
+    .wtab.today .wtab-name { color: var(--accent); }
     .wtab-dot { width: 4px; height: 4px; border-radius: 50%; background: var(--accent); margin: 5px auto 0; opacity: 0; }
     .wtab-dot.has { opacity: 1; }
 
@@ -256,6 +255,16 @@
     }
     .add-card:hover { border-color: var(--accent); color: var(--accent); background: rgba(59,130,246,.04); }
     .add-card .plus { font-size: 24px; margin-bottom: 4px; display: block; }
+
+    /* Import / Export */
+    .io-row { display: flex; gap: 8px; margin-top: 10px; }
+    .io-btn {
+      flex: 1; display: flex; align-items: center; justify-content: center; gap: 6px;
+      background: var(--bg2); border: 1px solid var(--brd2); border-radius: var(--rs);
+      padding: 10px 8px; font-size: 12px; font-family: var(--fn); font-weight: 500;
+      color: var(--txt2); cursor: pointer; transition: all .15s;
+    }
+    .io-btn:hover { border-color: var(--accent); color: var(--accent); background: rgba(59,130,246,.06); }
 
     /* Empty */
     .empty { text-align: center; padding: 3rem 1rem; color: var(--txt3); font-size: 13px; line-height: 1.8; }
@@ -456,6 +465,22 @@
     <div class="add-card" onclick="openModal()">
       <span class="plus">＋</span>
       Zug hinzufügen
+    </div>
+
+    <div class="io-row">
+      <button class="io-btn" onclick="exportPlan()">
+        <svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M6.5 1v8M3 6l3.5 3.5L10 6"/><path d="M1 11h11"/>
+        </svg>
+        Exportieren
+      </button>
+      <button class="io-btn" onclick="document.getElementById('import-file').click()">
+        <svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M6.5 9V1M3 4l3.5-3.5L10 4"/><path d="M1 11h11"/>
+        </svg>
+        Importieren
+      </button>
+      <input type="file" id="import-file" accept=".json" style="display:none" onchange="importPlan(this)">
     </div>
   </div>
 </div>
@@ -890,6 +915,68 @@ function toast(msg){
 setInterval(()=>{document.getElementById('clock').textContent=new Date().toLocaleTimeString('de-AT',{hour:'2-digit',minute:'2-digit',second:'2-digit'});},1000);
 document.getElementById('clock').textContent=new Date().toLocaleTimeString('de-AT',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
 setInterval(()=>{if(activeDay===TODAY)refreshLive();},60000);
+
+// ── Export / Import ───────────────────────────────────────────────────────────
+function exportPlan() {
+  const plan = {
+    version: 1,
+    exported: new Date().toISOString(),
+    days: data
+  };
+  const blob = new Blob([JSON.stringify(plan, null, 2)], { type: 'application/json' });
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement('a');
+  const date = new Date().toISOString().split('T')[0];
+  a.href = url; a.download = `train-tracker-${date}.json`;
+  a.click(); URL.revokeObjectURL(url);
+  toast('✓ Wochenplan exportiert');
+}
+
+function importPlan(input) {
+  const file = input.files[0]; if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    try {
+      const plan = JSON.parse(e.target.result);
+      // Support both raw data object and wrapped {version, days}
+      const incoming = plan.days || plan;
+      // Validate: must have keys 0-6
+      if (!incoming[0] && !incoming['0']) throw new Error('Ungültiges Format');
+      const normalized = {};
+      for (let i = 0; i < 7; i++) normalized[i] = incoming[i] || incoming[String(i)] || [];
+      // Merge or replace?
+      const hasExisting = Object.values(data).some(arr => arr.length > 0);
+      if (hasExisting) {
+        if (!confirm('Vorhandene Züge ersetzen oder zusammenführen?
+
+OK = Ersetzen
+Abbrechen = Zusammenführen')) {
+          // Merge: add imported trains that don't already exist (by dep+von+nach)
+          for (let i = 0; i < 7; i++) {
+            (normalized[i] || []).forEach(z => {
+              const exists = (data[i] || []).some(e => e.dep === z.dep && e.von === z.von && e.nach === z.nach);
+              if (!exists) { z.id = nextId++; if (!data[i]) data[i]=[]; data[i].push(z); }
+            });
+          }
+          save(); renderTabs(); renderDay();
+          toast('✓ Züge zusammengeführt');
+          return;
+        }
+      }
+      // Replace
+      for (let i = 0; i < 7; i++) {
+        data[i] = (normalized[i] || []).map(z => ({ ...z, id: nextId++ }));
+      }
+      save(); renderTabs(); renderDay();
+      toast('✓ Wochenplan importiert');
+    } catch(err) {
+      toast('Fehler: Ungültige Datei');
+      console.error(err);
+    }
+    input.value = '';
+  };
+  reader.readAsText(file);
+}
 
 initApiBanner();updateNotifBtn();renderTabs();renderDay();
 setTimeout(()=>{(data[activeDay]||[]).forEach(z=>document.getElementById('zc-'+z.id)?.classList.add('expanded'));if(activeDay===TODAY)refreshLive();},150);
