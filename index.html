@@ -10,6 +10,7 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
 
 
+
    
     :root {
       --navy: #0f2040;
@@ -308,6 +309,24 @@
 
     /* conn items */
     .conn-wrap { margin-bottom: 4px; }
+    .conn-scroll {
+      max-height: 340px; overflow-y: auto; scroll-behavior: smooth;
+      border-radius: 10px;
+      /* custom scrollbar */
+      scrollbar-width: thin; scrollbar-color: var(--brd2) transparent;
+    }
+    .conn-scroll::-webkit-scrollbar { width: 4px; }
+    .conn-scroll::-webkit-scrollbar-track { background: transparent; }
+    .conn-scroll::-webkit-scrollbar-thumb { background: var(--brd2); border-radius: 2px; }
+    .load-more-btn {
+      width: 100%; padding: 11px; margin-top: 6px;
+      background: var(--bg); border: 1px dashed var(--brd2); border-radius: 10px;
+      font-family: var(--fn); font-size: 12px; font-weight: 500; color: var(--txt2);
+      cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px;
+      -webkit-appearance: none; transition: all .15s;
+    }
+    .load-more-btn:active { background: rgba(59,130,246,.07); color: var(--accent); }
+    .load-more-btn.loading-more { color: var(--txt3); pointer-events: none; }
     .conn-lbl { font-family: var(--fm); font-size: 10px; letter-spacing: 1px; color: var(--txt3); text-transform: uppercase; margin-bottom: 8px; }
     .conn-item {
       background: var(--bg); border: 1px solid var(--brd);
@@ -604,6 +623,9 @@ function pickSt(f,name,id){
 });
 
 // ── Find connections ─────────────────────────────────────────────────────────
+// ── Connection search & pagination ──────────────────────────────────────────
+let _lastDepTime = null; // ISO string of last departure for "load more"
+
 async function findConns(){
   const von  = document.getElementById('f-von').value.trim();
   const nach = document.getElementById('f-nach').value.trim();
@@ -618,35 +640,134 @@ async function findConns(){
   selConn=null;
   for(let i=0;i<7;i++) document.getElementById('d'+i).checked=(i===activeDay);
 
+  // Start from midnight of today so we see the full day
   const today=new Date().toISOString().split('T')[0];
-  const conns=await api(`/connections?fromId=${encodeURIComponent(vonId)}&toId=${encodeURIComponent(nachId)}&date=${today}`);
+  window._vonId=vonId; window._nachId=nachId; window._von=von; window._nach=nach;
+  window._cd=[];
+  _lastDepTime=today+'T00:00:00';
+
+  await loadMoreConns(true);
+}
+
+async function loadMoreConns(initial=false){
+  const wrap=document.getElementById('conn-wrap');
+  const vonId=window._vonId, nachId=window._nachId;
+
+  // Show spinner inline at bottom
+  const btnId='load-more-btn';
+  const existingBtn=document.getElementById(btnId);
+  if(existingBtn) existingBtn.remove();
+
+  // Append loading indicator
+  const loadDiv=document.createElement('div');
+  loadDiv.id='inline-load';
+  loadDiv.className='loading';
+  loadDiv.innerHTML='<div class="spinner" style="width:18px;height:18px;margin:8px auto"></div>';
+
+  if(initial){
+    wrap.innerHTML='';
+    wrap.appendChild(loadDiv);
+  } else {
+    wrap.appendChild(loadDiv);
+  }
+
+  const date=_lastDepTime.split('T')[0];
+  const conns=await api(`/connections?fromId=${encodeURIComponent(vonId)}&toId=${encodeURIComponent(nachId)}&date=${date}`);
+
+  // Remove spinner
+  document.getElementById('inline-load')?.remove();
 
   if(!conns||!conns.length){
-    document.getElementById('conn-wrap').innerHTML='<div class="loading">Keine Verbindungen gefunden.</div>';
+    if(initial) wrap.innerHTML='<div class="loading">Keine Verbindungen gefunden.</div>';
+    else toast('Keine weiteren Verbindungen gefunden');
     return;
   }
-  window._cd=conns; window._von=von; window._nach=nach;
 
-  document.getElementById('conn-wrap').innerHTML=
-    '<div class="conn-lbl">Verbindungen heute</div>'+
-    conns.map((c,i)=>{
-      const dep=c.plannedDep?fmt(new Date(c.plannedDep)):'—';
-      const arr=c.plannedArr?fmt(new Date(c.plannedArr)):'—';
-      const dm=Math.round((c.depDelay||0)/60);
-      const rd=dm>0?addM(dep,dm):dep;
-      return `<div class="conn-item ${c.cancelled?'gone':''}" id="ci${i}" onclick="pickConn(${i})">
-        <div class="conn-dep ${dm>0?'late':''}">${c.cancelled?'—':rd}</div>
-        <div class="conn-mid">
-          <div class="conn-line">${c.lineName||von+' → '+nach}${c.transfers>0?' · '+c.transfers+' Umst.':''}</div>
-          <div class="conn-detail">${c.direction||''}</div>
-        </div>
-        <div class="conn-right">
-          <div class="conn-arr">${arr}</div>
-          ${dm>0?`<div class="conn-late">+${dm} min</div>`:''}
-          ${c.cancelled?`<div class="conn-gone-badge">Entfällt</div>`:''}
-        </div>
+  // Filter out already-shown connections and those before _lastDepTime
+  const lastTs=new Date(_lastDepTime).getTime();
+  const newConns=conns.filter(c=>{
+    if(!c.plannedDep) return false;
+    const ts=new Date(c.plannedDep).getTime();
+    return ts>=lastTs && !window._cd.some(e=>e.plannedDep===c.plannedDep&&e.lineName===c.lineName);
+  });
+
+  if(!newConns.length){
+    toast('Keine weiteren Züge heute');
+    return;
+  }
+
+  // Add to global list
+  const offset=window._cd.length;
+  window._cd.push(...newConns);
+
+  // Update _lastDepTime to last loaded + 1 min
+  const lastConn=newConns[newConns.length-1];
+  if(lastConn.plannedDep){
+    const d=new Date(lastConn.plannedDep);
+    d.setMinutes(d.getMinutes()+1);
+    _lastDepTime=d.toISOString();
+  }
+
+  // Build or update the scroll container
+  if(initial){
+    const lbl=document.createElement('div');
+    lbl.className='conn-lbl';
+    lbl.textContent='Verbindungen — '+window._von+' → '+window._nach;
+    wrap.appendChild(lbl);
+
+    const scroll=document.createElement('div');
+    scroll.className='conn-scroll';
+    scroll.id='conn-scroll';
+    wrap.appendChild(scroll);
+  }
+
+  const scroll=document.getElementById('conn-scroll');
+  newConns.forEach((c,j)=>{
+    const i=offset+j;
+    const dep=c.plannedDep?fmt(new Date(c.plannedDep)):'—';
+    const arr=c.plannedArr?fmt(new Date(c.plannedArr)):'—';
+    const dm=Math.round((c.depDelay||0)/60);
+    const rd=dm>0?addM(dep,dm):dep;
+    const now=new Date();
+    const isPast=c.plannedDep&&new Date(c.plannedDep)<now;
+    const div=document.createElement('div');
+    div.className='conn-item'+(c.cancelled?' gone':'')+(isPast?' past':'');
+    div.id='ci'+i;
+    div.style.opacity=isPast?'0.45':'1';
+    div.innerHTML=`
+      <div class="conn-dep ${dm>0?'late':''}">${c.cancelled?'—':rd}</div>
+      <div class="conn-mid">
+        <div class="conn-line">${c.lineName||window._von+' → '+window._nach}${c.transfers>0?' · '+c.transfers+' Umst.':''}</div>
+        <div class="conn-detail">${c.direction||''}</div>
+      </div>
+      <div class="conn-right">
+        <div class="conn-arr">${arr}</div>
+        ${dm>0?'<div class="conn-late">+'+dm+' min</div>':''}
+        ${c.cancelled?'<div class="conn-gone-badge">Entfällt</div>':''}
       </div>`;
-    }).join('');
+    div.onclick=()=>pickConn(i);
+    scroll.appendChild(div);
+  });
+
+  // Add "load more" button after scroll box
+  const btn=document.createElement('button');
+  btn.className='load-more-btn';
+  btn.id='load-more-btn';
+  btn.innerHTML='<svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M6 1v10M1 7l5 5 5-5"/></svg> Weitere Züge laden';
+  btn.onclick=()=>loadMoreConns(false);
+  wrap.appendChild(btn);
+
+  // Auto-scroll to first upcoming conn on initial load
+  if(initial){
+    const now=new Date();
+    const firstUpcoming=newConns.findIndex(c=>c.plannedDep&&new Date(c.plannedDep)>=now);
+    if(firstUpcoming>0){
+      setTimeout(()=>{
+        const el=document.getElementById('ci'+firstUpcoming);
+        el?.scrollIntoView({behavior:'smooth',block:'nearest'});
+      },100);
+    }
+  }
 }
 
 function pickConn(i){
